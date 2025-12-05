@@ -1,0 +1,23 @@
+<!-- TEMP BUTTON: REMOVE AFTER UPLOADING -->
+<!-- <button (click)="uploadTestimonials()" class="fixed top-24 left-4 z-50 bg-red-600 text-white px-6 py-3 rounded-full font-bold shadow-2xl border-4 border-white">
+  ⚠️ Upload 28 Reviews to Firebase
+</button> -->
+<!-- END TEMP BUTTON -->
+
+<div class="min-h-screen font-sans text-slate-800 bg-slate-50 selection:bg-amber-200 selection:text-amber-900">
+  
+  <app-home-hero (startJourney)="handleStartJourney($event)"></app-home-hero>
+
+  <app-home-about></app-home-about>
+
+  <app-home-featured-portfolio [listings]="featuredListings"></app-home-featured-portfolio>
+
+  <app-home-services (startJourney)="handleStartJourney($event)"></app-home-services>
+
+  <app-home-mortgage-calculator></app-home-mortgage-calculator>
+
+  <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
+
+  <app-home-contact></app-home-contact>
+
+</div>

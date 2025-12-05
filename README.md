@@ -1,59 +1,119 @@
-# RealEstateDreamers
+Real Estate for Dreamers 🏡✨
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.2.
+A professional, high-performance real estate web application built for Kritika Katwal, a top-producing realtor in Georgia. This application combines modern web architecture with AI-driven interactions to provide a seamless experience for home buyers and sellers.
 
-## Development server
+🌟 Key Features
 
-To start a local development server, run:
+🤖 AI Real Estate Assistant: A floating chatbot powered by Google Gemini AI that answers questions about the Georgia market, buying processes, and specific services in real-time.
 
-```bash
+📊 Dynamic Portfolio: A "Master" listing system that handles three distinct property states:
+
+Active: Full gallery, details, and tour scheduling.
+
+Coming Soon: Teaser mode with blurred visuals and "Join Waitlist" CTA.
+
+Sold: Success stories with "Price Over Asking" metrics and a "Get Home Value" calculator.
+
+🧮 Interactive Mortgage Calculator: A real-time calculator allowing users to estimate monthly payments based on interest rates, down payments, and loan terms.
+
+📝 Serverless Lead Generation: A custom contact form that bypasses traditional backends and saves leads directly to a Google Sheet via Google Apps Script.
+
+📱 Fully Responsive: Mobile-first design using Tailwind CSS for a premium look on all devices.
+
+☁️ Cloud Integration: Powered by Firebase Firestore for data management and Firebase Storage for high-resolution image hosting.
+
+🛠️ Tech Stack
+
+Frontend: Angular 17+ (Standalone Components, Signals)
+
+Styling: Tailwind CSS
+
+Database: Firebase Firestore & Storage
+
+AI: Google Gemini API (1.5 Flash)
+
+Integrations: Google Apps Script (Form Handling)
+
+Hosting: Netlify
+
+🚀 Getting Started
+
+Prerequisites
+
+Node.js v18 or higher
+
+Angular CLI (npm install -g @angular/cli)
+
+Installation
+
+Clone the repository:
+
+git clone [https://github.com/your-username/real-estate-dreamers.git](https://github.com/your-username/real-estate-dreamers.git)
+cd real-estate-dreamers
+
+
+Install dependencies:
+
+npm install
+
+
+Configure Environment Variables:
+Create a file src/environments/environment.ts and add your keys:
+
+export const environment = {
+  production: false,
+  geminiApiKey: 'YOUR_GEMINI_API_KEY',
+  googleScriptUrl: 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL',
+  firebaseConfig: {
+    apiKey: "...",
+    authDomain: "...",
+    projectId: "...",
+    storageBucket: "...",
+    messagingSenderId: "...",
+    appId: "..."
+  }
+};
+
+
+Run the development server:
+
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+Navigate to http://localhost:4200/.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+📂 Project Structure
 
-```bash
-ng generate component component-name
-```
+We follow a modular Feature-First architecture for scalability:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+src/app/
+├── core/                 # Singletons (Data Services, Models, Global Layout)
+│   ├── services/         # Logic for Firebase, AI, and Lead Gen
+│   └── models/           # TypeScript Interfaces
+├── features/             # Main Route Components
+│   ├── home/             # Landing Page (split into sub-components)
+│   ├── portfolio/        # Grid view of all properties
+│   ├── listing-detail/   # Dynamic single property view
+│   └── chatbot/          # Floating AI widget
+└── shared/               # Reusable UI (Icons, Loaders)
 
-```bash
-ng generate --help
-```
 
-## Building
+🚢 Deployment
 
-To build the project run:
+This project is optimized for deployment on Netlify.
 
-```bash
+Run the build command:
+
 ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Running unit tests
+Deploy the dist/real-estate-dreamers/browser folder.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Important: Ensure you add a _redirects file in src/ containing /* /index.html 200 to handle Angular routing correctly on Netlify.
 
-```bash
-ng test
-```
+👤 Author
 
-## Running end-to-end tests
+Rupesh Ghimire
 
-For end-to-end (e2e) testing, run:
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Built with ❤️ for Georgia Real Estate.

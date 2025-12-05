@@ -1,0 +1,258 @@
+<div class="min-h-screen bg-slate-50 pb-20" *ngIf="listing; else loading">
+  
+  <!-- 1. ACTIVE LISTING VIEW -->
+  <ng-container *ngIf="listing.status === 'active'">
+    <!-- Dark Backdrop for Header -->
+    <div class="bg-slate-900 pt-32 pb-48 relative overflow-hidden">
+      <!-- Abstract Background Elements -->
+      <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500 rounded-full blur-3xl opacity-10 -mr-16 -mt-16"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-slate-700 rounded-full blur-3xl opacity-20 -ml-16 -mb-16"></div>
+      
+      <div class="container mx-auto px-6 relative z-10">
+        <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-8 text-white">
+          <div>
+            <span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 inline-block shadow-lg">Active Listing</span>
+            <h1 class="text-3xl md:text-5xl font-serif font-bold leading-tight">{{ listing.title }}</h1>
+            <p class="text-slate-300 text-lg flex items-center gap-2 mt-3">
+              <app-icon name="map-pin" class="w-5 h-5 text-amber-500"></app-icon> {{ listing.address }}
+            </p>
+          </div>
+          <div class="md:text-right">
+            <p class="text-slate-400 text-sm uppercase tracking-widest mb-1">List Price</p>
+            <p class="text-4xl font-serif font-bold text-amber-500">${{ listing.price | number }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mx-auto px-6 -mt-32 relative z-20">
+      <!-- Gallery Grid -->
+      <div class="grid md:grid-cols-2 gap-2 mb-8 h-[500px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white">
+        <img [src]="listing.imageUrl" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700 cursor-pointer">
+        <div class="grid grid-cols-2 gap-2">
+          <img *ngFor="let img of listing.gallery" [src]="img" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700 cursor-pointer">
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-12 mt-12">
+        <div class="lg:col-span-2">
+          <!-- Key Stats -->
+          <div class="flex gap-8 border-b border-slate-200 pb-8 mb-8">
+            <div class="text-center px-4">
+              <span class="block text-3xl font-serif font-bold text-slate-900">{{ listing.beds }}</span>
+              <span class="text-slate-500 text-xs uppercase tracking-wider">Bedrooms</span>
+            </div>
+            <div class="text-center px-4 border-l border-slate-200">
+              <span class="block text-3xl font-serif font-bold text-slate-900">{{ listing.baths }}</span>
+              <span class="text-slate-500 text-xs uppercase tracking-wider">Bathrooms</span>
+            </div>
+            <div class="text-center px-4 border-l border-slate-200">
+              <span class="block text-3xl font-serif font-bold text-slate-900">{{ listing.sqft | number }}</span>
+              <span class="text-slate-500 text-xs uppercase tracking-wider">Square Feet</span>
+            </div>
+          </div>
+
+          <h3 class="text-2xl font-serif font-bold text-slate-900 mb-6">About this home</h3>
+          <p class="text-slate-600 leading-relaxed mb-10 text-lg">{{ listing.description }}</p>
+          
+          <h3 class="text-2xl font-serif font-bold text-slate-900 mb-6">Features & Amenities</h3>
+          <ul class="grid md:grid-cols-2 gap-4">
+            <li *ngFor="let feat of listing.features" class="flex items-center gap-3 text-slate-700 p-3 bg-white rounded-lg shadow-sm border border-slate-100">
+              <div class="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                <app-icon name="star" class="w-4 h-4"></app-icon>
+              </div>
+              {{ feat }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Agent Card -->
+        <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 h-fit sticky top-28">
+          <div class="text-center mb-6">
+            <h3 class="font-serif font-bold text-slate-900 text-2xl mb-2">Interested?</h3>
+            <p class="text-slate-500 text-sm">Schedule a private tour of this property.</p>
+          </div>
+          <button (click)="contactRealtor('buying')" 
+                  class="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-amber-600 transition-all mb-4 shadow-lg hover:shadow-amber-500/20">
+            Schedule a Tour
+          </button>
+          <button (click)="contactRealtor('other')" 
+                  class="w-full py-4 border-2 border-slate-100 text-slate-600 rounded-xl font-bold hover:border-slate-900 hover:text-slate-900 transition-all">
+            Ask a Question
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+
+  <!-- 2. COMING SOON VIEW (Teaser Mode) -->
+  <ng-container *ngIf="listing.status === 'coming-soon'">
+    <div class="min-h-screen relative flex items-center justify-center overflow-hidden">
+      <!-- Full Screen Background with Navy Overlay -->
+      <div class="absolute inset-0 z-0">
+        <img [src]="listing.imageUrl" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"></div>
+      </div>
+
+      <div class="container mx-auto px-6 relative z-10 text-center">
+        <div class="inline-block animate-bounce mb-6">
+           <span class="bg-amber-500 text-white px-6 py-2 rounded-full font-bold tracking-widest text-sm uppercase shadow-2xl">Coming Soon</span>
+        </div>
+        
+        <h1 class="text-5xl md:text-8xl font-serif font-bold text-white mb-8 tracking-tight">{{ listing.address }}</h1>
+        
+        <p class="text-slate-300 text-xl md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed">
+          An exclusive opportunity is coming to market on <span class="text-white font-bold">{{ listing.launchDate | date:'longDate' }}</span>.
+          <br/>Be the first to see it.
+        </p>
+
+        <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto text-white mb-12 border-t border-white/10 pt-8">
+          <div>
+            <p class="text-3xl font-serif font-bold">{{ listing.beds }}</p>
+            <p class="text-xs text-slate-400 uppercase tracking-widest">Beds</p>
+          </div>
+          <div class="border-l border-white/10">
+            <p class="text-3xl font-serif font-bold">{{ listing.baths }}</p>
+            <p class="text-xs text-slate-400 uppercase tracking-widest">Baths</p>
+          </div>
+          <div class="border-l border-white/10">
+            <p class="text-3xl font-serif font-bold">{{ listing.sqft | number }}</p>
+            <p class="text-xs text-slate-400 uppercase tracking-widest">Sq Ft</p>
+          </div>
+        </div>
+
+        <button (click)="contactRealtor('buying')"
+                class="px-10 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-amber-500 hover:text-white transition-all transform hover:scale-105 shadow-2xl">
+          Join Early Access List
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+
+  <!-- 3. SOLD PORTFOLIO VIEW (Success Story) -->
+  <ng-container *ngIf="listing.status === 'sold'">
+    <!-- Dark Hero for Sold -->
+    <div class="bg-slate-900 pt-32 pb-48 relative overflow-hidden">
+      <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+      <div class="container mx-auto px-6 relative z-10 text-center">
+        <span class="text-red-500 font-bold tracking-widest text-lg uppercase mb-4 inline-block">Sold Success Story</span>
+        <h1 class="text-4xl md:text-6xl font-serif font-bold text-white">{{ listing.title }}</h1>
+      </div>
+    </div>
+
+    <div class="container mx-auto px-6 -mt-32 relative z-20">
+      <div class="relative h-[500px] rounded-3xl overflow-hidden mb-12 shadow-2xl border-4 border-white bg-slate-800">
+        <img [src]="listing.imageUrl" class="w-full h-full object-cover opacity-60">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+        
+        <!-- Sold Stamp -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-8 border-red-500/80 text-red-500/80 text-6xl md:text-8xl font-black uppercase tracking-widest px-12 py-4 rotate-12 mask-image">
+          SOLD
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-16 items-start">
+        <div>
+          <h2 class="text-3xl font-serif font-bold text-slate-900 mb-6">The Story</h2>
+          <p class="text-slate-600 leading-relaxed text-lg mb-8">{{ listing.description }}</p>
+          
+          <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-lg">
+            <h4 class="font-bold text-slate-900 mb-6 flex items-center gap-2">
+              <div class="w-2 h-6 bg-amber-500 rounded-full"></div> Sale Highlights
+            </h4>
+            <div class="grid grid-cols-2 gap-y-6 gap-x-4">
+              <div>
+                <p class="text-xs text-slate-400 uppercase tracking-wider">List Price</p>
+                <p class="text-xl font-bold text-slate-700 decoration-slate-400 line-through">${{ listing.price | number }}</p>
+              </div>
+              <div>
+                <p class="text-xs text-amber-600 uppercase tracking-wider font-bold">Sold Price</p>
+                <p class="text-2xl font-bold text-slate-900">${{ listing.soldPrice | number }}</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 uppercase tracking-wider">Time on Market</p>
+                <p class="text-xl font-bold text-slate-900">4 Days</p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-400 uppercase tracking-wider">Closed Date</p>
+                <p class="text-xl font-bold text-slate-900">{{ listing.soldDate | date:'mediumDate' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NEW: Value Estimator Card -->
+        <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden group">
+          <div class="absolute top-0 right-0 w-48 h-48 bg-amber-500 rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
+          
+          <div class="relative z-10">
+            
+            <!-- Default State: Input Form -->
+            <ng-container *ngIf="!estimatedValue">
+              <h3 class="text-2xl font-serif font-bold mb-3">Estimate Your Home Value</h3>
+              <p class="text-slate-400 mb-6 text-sm">
+                Based on this sale's data, see what your home might be worth in today's market.
+              </p>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="text-xs uppercase tracking-wider text-slate-500 font-bold mb-1 block">Square Feet</label>
+                  <input [(ngModel)]="estSqft" type="number" placeholder="e.g. 2500" 
+                         class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs uppercase tracking-wider text-slate-500 font-bold mb-1 block">Beds</label>
+                    <input [(ngModel)]="estBeds" type="number" placeholder="4" 
+                           class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all">
+                  </div>
+                  <div>
+                    <label class="text-xs uppercase tracking-wider text-slate-500 font-bold mb-1 block">Baths</label>
+                    <input [(ngModel)]="estBaths" type="number" placeholder="3" 
+                           class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all">
+                  </div>
+                </div>
+
+                <button (click)="calculateEstimate()" [disabled]="!estSqft"
+                        class="w-full py-4 mt-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-amber-500/25 transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                  Calculate Estimate
+                </button>
+              </div>
+            </ng-container>
+
+            <!-- Result State -->
+            <div *ngIf="estimatedValue" class="text-center py-4 animate-fadeInUp">
+              <p class="text-slate-400 text-sm uppercase tracking-widest mb-2">Estimated Market Value</p>
+              <p class="text-4xl md:text-5xl font-serif font-bold text-amber-500 mb-6">
+                ${{ estimatedValue | number:'1.0-0' }}
+              </p>
+              <p class="text-slate-400 text-xs mb-8 italic">
+                *This is a preliminary estimate based on comparable data. For an accurate appraisal, book a professional valuation.
+              </p>
+              
+              <button (click)="contactRealtor('selling')" 
+                      class="w-full py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-slate-100 transition-all mb-3">
+                Get Official Valuation
+              </button>
+              
+              <button (click)="resetEstimate()" class="text-slate-500 hover:text-white text-sm transition-colors">
+                Recalculate
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>
+
+<ng-template #loading>
+  <div class="min-h-screen flex items-center justify-center bg-slate-50">
+    <div class="animate-spin w-12 h-12 border-4 border-slate-200 border-t-amber-500 rounded-full"></div>
+  </div>
+</ng-template>

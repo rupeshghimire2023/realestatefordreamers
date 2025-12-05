@@ -1,0 +1,118 @@
+<div class="min-h-screen bg-slate-50">
+  
+  <!-- Dark Hero Section -->
+  <div class="bg-slate-900 pt-32 pb-32 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500 rounded-full blur-3xl opacity-10 -mr-16 -mt-16"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-slate-700 rounded-full blur-3xl opacity-20 -ml-16 -mb-16"></div>
+
+    <div class="container mx-auto px-6 relative z-10 text-center">
+      <span class="text-amber-500 font-semibold tracking-widest text-sm uppercase animate-fadeInUp">Our Collection</span>
+      <h1 class="text-4xl md:text-5xl font-serif font-bold text-white mt-4 mb-6 animate-fadeInUp delay-100">
+        Exclusive Portfolio
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed animate-fadeInUp delay-200">
+        From Coming Soon opportunities to our record-breaking Sold properties. 
+        Explore the finest real estate in Georgia.
+      </p>
+    </div>
+  </div>
+
+  <!-- Listings Grid -->
+  <div class="container mx-auto px-6 -mt-20 relative z-20 pb-20">
+    
+    <!-- 1. LOADING STATE (Skeleton) -->
+    <ng-container *ngIf="isLoading; else loadedContent">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Show 6 skeleton cards while loading -->
+        <div *ngFor="let i of [1,2,3,4,5,6]" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col h-[500px]">
+          <app-skeleton className="w-full h-72"></app-skeleton>
+          <div class="p-8 flex-1 flex flex-col gap-4">
+            <app-skeleton className="w-3/4 h-8"></app-skeleton>
+            <app-skeleton className="w-1/2 h-4"></app-skeleton>
+            <div class="grid grid-cols-3 gap-2 mt-auto">
+               <app-skeleton className="h-10"></app-skeleton>
+               <app-skeleton className="h-10"></app-skeleton>
+               <app-skeleton className="h-10"></app-skeleton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- 2. LOADED CONTENT -->
+    <ng-template #loadedContent>
+      
+      <!-- Empty State (No Listings Found) -->
+      <div *ngIf="listings.length === 0" class="bg-white p-12 rounded-3xl shadow-lg text-center border border-slate-100">
+        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+          <app-icon name="home" class="w-8 h-8"></app-icon>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900 mb-2">No Listings Found</h3>
+        <p class="text-slate-500">We are currently updating our inventory. Please check back soon!</p>
+      </div>
+
+      <!-- Real Listings Grid -->
+      <div *ngIf="listings.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let property of listings" 
+             [routerLink]="['/listing', property.id]" 
+             class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-slate-100 flex flex-col animate-fadeInUp">
+          
+          <!-- Image Container -->
+          <div class="relative h-72 overflow-hidden">
+            <div class="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/0 transition-colors z-10"></div>
+            <img [src]="property.imageUrl" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            
+            <!-- Status Badge -->
+            <div class="absolute top-4 left-4 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg z-20"
+                 [ngClass]="{
+                   'bg-green-500 text-white': property.status === 'active',
+                   'bg-amber-500 text-white': property.status === 'coming-soon',
+                   'bg-slate-900 text-white': property.status === 'sold'
+                 }">
+              {{ property.status.replace('-', ' ') }}
+            </div>
+
+            <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
+               <p class="text-white font-serif font-bold text-xl">
+                 {{ property.status === 'sold' ? 'Sold for ' : '' }} 
+                 ${{ (property.status === 'sold' ? property.soldPrice : property.price) | number }}
+               </p>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="p-8 flex-1 flex flex-col">
+            <h3 class="text-2xl font-serif font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+              {{ property.title }}
+            </h3>
+            <p class="text-slate-500 text-sm mb-6 flex items-center gap-2 border-b border-slate-100 pb-6">
+              <app-icon name="map-pin" class="w-4 h-4 text-amber-500"></app-icon> {{ property.address }}
+            </p>
+
+            <div class="grid grid-cols-3 gap-2 mt-auto">
+              <div class="text-center">
+                <p class="font-bold text-slate-900 text-lg">{{ property.beds }}</p>
+                <p class="text-xs text-slate-400 uppercase tracking-wide">Beds</p>
+              </div>
+              <div class="text-center border-l border-slate-100">
+                <p class="font-bold text-slate-900 text-lg">{{ property.baths }}</p>
+                <p class="text-xs text-slate-400 uppercase tracking-wide">Baths</p>
+              </div>
+              <div class="text-center border-l border-slate-100">
+                <p class="font-bold text-slate-900 text-lg">{{ property.sqft | number }}</p>
+                <p class="text-xs text-slate-400 uppercase tracking-wide">Sq Ft</p>
+              </div>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-slate-50 text-center">
+               <span class="text-amber-600 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2 group-hover:gap-4 transition-all">
+                 View Details <app-icon name="chevron-right" class="w-4 h-4"></app-icon>
+               </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+  </div>
+</div>
