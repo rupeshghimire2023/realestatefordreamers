@@ -79,6 +79,7 @@ export class HeaderComponent {
     { label: 'About', action: 'scroll', target: 'about' },
     { label: 'Portfolio', action: 'route', target: '/portfolio' }, // Links to the full portfolio page
     { label: 'Services', action: 'scroll', target: 'buying' },
+    { label: 'Blog', action: 'route', target: '/blog' },
     { label: 'Stories', action: 'scroll', target: 'testimonials' }
   ];
 

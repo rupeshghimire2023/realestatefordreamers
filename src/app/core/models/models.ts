@@ -20,6 +20,15 @@ export interface Property {
   soldDate?: Date;
 }
 
+export interface BlogPost {
+  id: string;
+  title: string;
+  content: string; // Markdown content
+  imageUrl: string;
+  date: any; // Firebase Timestamp
+  author: string;
+  category?: string;
+}
 export interface Testimonial {
   id: number | string; // Allow string IDs from Firebase
   text: string;

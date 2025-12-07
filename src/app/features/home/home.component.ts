@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router'; // Import RouterModule
 // Import all new sub-components
 import { HeroComponent } from './components/hero/hero.component';
 import { AboutComponent } from './components/about/about.component';
@@ -10,8 +10,9 @@ import { MortgageCalculatorComponent } from './components/mortgage-calculator/mo
 import { TestimonialsComponent } from './components/testimonials/testimonials.component';
 import { ContactComponent } from './components/contact/contact.component';
 
-import { Testimonial, Property } from '../../core/models/models';
+import { Testimonial, Property, BlogPost } from '../../core/models/models';
 import { ListingService } from '../../core/services/listing.service';
+import { BlogService } from '../../core/services/blog.service';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ import { ListingService } from '../../core/services/listing.service';
     ServicesComponent,
     MortgageCalculatorComponent,
     TestimonialsComponent,
+    RouterModule,
     ContactComponent
   ],
   templateUrl: './home.component.html'
@@ -36,6 +38,10 @@ export class HomeComponent implements OnInit {
 
   testimonials: Testimonial[] = [];
   featuredListings: Property[] = [];
+  private blogService = inject(BlogService); // Inject BlogService
+
+  // ... variables
+  recentPosts: BlogPost[] = []; // Variable to hold posts
 
   ngOnInit() {
     // 1. Fetch Data
@@ -62,6 +68,10 @@ export class HomeComponent implements OnInit {
           }
         }, 100);
       }
+    });
+
+    this.blogService.getPosts().subscribe(data => {
+      this.recentPosts = data.slice(0, 3);
     });
   }
 

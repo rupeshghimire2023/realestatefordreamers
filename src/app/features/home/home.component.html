@@ -17,6 +17,34 @@
   <app-home-mortgage-calculator></app-home-mortgage-calculator>
 
   <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
+  <!-- Blog Preview Section -->
+  <section id="blog" class="py-24 bg-white" *ngIf="recentPosts.length > 0">
+    <div class="container mx-auto px-6">
+      <div class="flex justify-between items-end mb-12">
+        <div>
+          <span class="text-amber-600 font-semibold tracking-wider text-sm uppercase">Market Insights</span>
+          <h2 class="text-3xl md:text-4xl font-serif font-bold text-slate-900 mt-2">Latest News & Tips</h2>
+        </div>
+        <a routerLink="/blog" class="hidden md:block text-slate-500 hover:text-slate-900 font-bold transition-colors">View All Articles &rarr;</a>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div *ngFor="let post of recentPosts" [routerLink]="['/blog', post.id]" class="group cursor-pointer">
+          <div class="rounded-2xl overflow-hidden h-56 mb-6 shadow-sm group-hover:shadow-xl transition-all duration-300">
+            <img [src]="post.imageUrl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+          </div>
+          <span class="text-amber-600 text-xs font-bold uppercase tracking-wider">{{ post.category }}</span>
+          <h3 class="text-xl font-bold text-slate-900 mt-2 mb-3 group-hover:text-amber-600 transition-colors">{{ post.title }}</h3>
+          <p class="text-slate-500 text-sm line-clamp-2 leading-relaxed">{{ post.content }}</p>
+          <span class="inline-block mt-4 text-slate-900 text-sm font-bold border-b-2 border-amber-100 group-hover:border-amber-500 transition-all">Read Article</span>
+        </div>
+      </div>
+      
+      <div class="mt-8 text-center md:hidden">
+        <a routerLink="/blog" class="text-slate-900 font-bold border-b-2 border-slate-900 pb-1">View All Articles</a>
+      </div>
+    </div>
+  </section>
 
   <app-home-contact></app-home-contact>
 
