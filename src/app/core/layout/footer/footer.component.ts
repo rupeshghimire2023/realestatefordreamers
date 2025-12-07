@@ -63,7 +63,7 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
             </ul>
 
             <div class="flex gap-3">
-              <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-amber-500 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="https://www.instagram.com/realestatefordreamers/" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-amber-500 hover:text-white transition-all transform hover:-translate-y-1">
                 <app-icon name="instagram" class="w-5 h-5"></app-icon>
               </a>
               <a href="https://www.facebook.com/p/Real-Estate-for-Dreamers-100079074604797" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
