@@ -13,6 +13,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { Testimonial, Property, BlogPost } from '../../core/models/models';
 import { ListingService } from '../../core/services/listing.service';
 import { BlogService } from '../../core/services/blog.service';
+import { HomeValueComponent } from './components/home-value/home-value.component';
 
 @Component({
   selector: 'app-home',
@@ -26,6 +27,7 @@ import { BlogService } from '../../core/services/blog.service';
     MortgageCalculatorComponent,
     TestimonialsComponent,
     RouterModule,
+    HomeValueComponent,
     ContactComponent
   ],
   templateUrl: './home.component.html'

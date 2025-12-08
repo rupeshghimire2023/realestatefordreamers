@@ -13,9 +13,12 @@
   <app-home-featured-portfolio [listings]="featuredListings"></app-home-featured-portfolio>
 
   <app-home-services (startJourney)="handleStartJourney($event)"></app-home-services>
-
+  
   <app-home-mortgage-calculator></app-home-mortgage-calculator>
+  
+  <app-home-value></app-home-value>
 
+  
   <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
   <!-- Blog Preview Section -->
   <section id="blog" class="py-24 bg-white" *ngIf="recentPosts.length > 0">
