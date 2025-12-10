@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // 1. Define the path
-const targetPath = path.resolve(__dirname, '../src/environments/environment.ts');
+const targetPath = path.resolve(__dirname, 'src/environments/environment.ts');
 const environmentsDir = path.dirname(targetPath);
 
 // 2. Ensure directory exists
