@@ -36,7 +36,7 @@ export default async (req, context) => {
   `;
 
   // 4. Call Google Gemini from the Server
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
   
   const payload = {
     contents: [{ parts: [{ text: userText }] }],
