@@ -3,7 +3,8 @@ export default async (req, context) => {
   const apiKey = Netlify.env.get("GEMINI_API_KEY");
 
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: "Server Configuration Error: API Key missing" }), { 
+    console.error("CRITICAL: GEMINI_API_KEY is missing in Netlify Environment Variables.");
+    return new Response(JSON.stringify({ reply: "System Error: AI Configuration missing. Please check server logs." }), { 
       status: 500,
       headers: { "Content-Type": "application/json" } 
     });
@@ -35,7 +36,7 @@ export default async (req, context) => {
     2. Only answer real estate questions.
   `;
 
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
   
   const payload = {
     contents: [{ parts: [{ text: userText }] }],
@@ -43,7 +44,7 @@ export default async (req, context) => {
   };
 
   // 4. Retry Logic (Exponential Backoff)
-  const maxRetries = 3;
+  const maxRetries = 3; // Reduced to 3 to fail faster if it's a hard error
   let attempt = 0;
   
   while (attempt < maxRetries) {
@@ -64,23 +65,31 @@ export default async (req, context) => {
         });
       }
 
-      // Handle Rate Limit (429) specifically
+      // Handle Errors
+      const errText = await response.text();
+      console.error(`Attempt ${attempt + 1} Failed. Status: ${response.status}. Google says: ${errText}`);
+
+      // If Rate Limit (429), wait and retry
       if (response.status === 429) {
-        console.warn(`Rate limit hit. Retrying attempt ${attempt + 1}...`);
         attempt++;
-        // Wait 2s, 4s, 8s...
-        const waitTime = Math.pow(2, attempt) * 1000; 
+        const waitTime = attempt * 2000; // Wait 2s, 4s, 6s
+        console.log(`Waiting ${waitTime}ms before retry...`);
         await new Promise(resolve => setTimeout(resolve, waitTime));
-        continue; // Retry loop
+        continue; 
       }
 
-      // Other Errors (400, 500) -> Don't retry, just fail
-      const errText = await response.text();
-      return new Response(JSON.stringify({ error: `Gemini API Error: ${errText}` }), { status: response.status });
+      // If key is invalid (400) or unauthorized (403), DO NOT RETRY. Fail immediately.
+      if (response.status === 400 || response.status === 403) {
+        return new Response(JSON.stringify({ reply: "I'm having a configuration issue. Please contact support." }), {
+          headers: { "Content-Type": "application/json" }
+        });
+      }
+
+      // Other errors, retry
+      attempt++;
 
     } catch (error) {
       console.error("Network Error:", error);
-      // Retry on network glitches too
       attempt++;
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
@@ -88,7 +97,7 @@ export default async (req, context) => {
 
   // 5. Final Failure Response
   return new Response(JSON.stringify({ 
-    reply: "I'm currently receiving too many messages. Please try again in a minute." 
+    reply: "I'm currently overwhelmed with requests. Please try again in 1 minute." 
   }), {
     headers: { "Content-Type": "application/json" }
   });
