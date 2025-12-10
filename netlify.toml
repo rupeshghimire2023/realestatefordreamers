@@ -1,8 +1,11 @@
 [build]
-  # Change this from "ng build" to "npm run build"
-  # This ensures it runs the script in package.json (node scripts/set-env.js && ng build)
+  # This runs your script to generate environment.ts, then builds Angular
   command = "npm run build" 
   publish = "dist/real-estate-dreamers/browser"
+
+[build.environment]
+  # This tells Netlify: "I know my keys are public, please let me deploy."
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
 
 [functions]
   directory = "netlify/functions"
