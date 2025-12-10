@@ -1,0 +1,15 @@
+[build]
+  # This tells Netlify where your built Angular files will end up
+  publish = "dist/real-estate-dreamers/browser"
+  command = "ng build"
+
+[functions]
+  # This tells Netlify where to find your backend code
+  directory = "netlify/functions"
+
+# This logic replaces your _redirects file
+# It fixes the 404 error when refreshing pages like /portfolio
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
