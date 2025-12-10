@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-// 1. Define the path
-const targetPath = path.resolve(__dirname, '../src/environments/environment.ts');
+// FIX: Changed from '../src' to './src' because the script is now in the root
+const targetPath = path.resolve(__dirname, './src/environments/environment.ts');
 const environmentsDir = path.dirname(targetPath);
 
 // 2. Ensure directory exists
