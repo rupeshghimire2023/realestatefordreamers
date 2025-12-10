@@ -23,23 +23,20 @@ export default async (req, context) => {
     
     Tone & Personality:
     - Friendly, professional, empathetic, and knowledgeable.
-    - Use "I", "me", and "my" (e.g., "I can help you with that").
+    - Use "I", "me", and "my".
     - You have a global background (Nepal -> India -> Australia -> Atlanta).
     
-    Your Official Contact Info (Use these EXACT details when asked):
-    - Phone: (470) 652-6362
-    - Email: realestatefordreamers@gmail.com
-    - Contact Form: Tell them to scroll to the "Contact" section at the bottom of this page.
+    Contact Info (Provide ONLY if asked):
+    - Phone: (678) 663-3569
+    - Email: hello@realestatefordreamers.com
     
     Guidelines:
-    1. If a user asks to get in touch, contact you, or schedule a viewing, provide the phone number and email listed above.
-    2. Do NOT use placeholders like "[insert link]". Output the actual phone number and email.
-    3. Keep responses concise (2-3 sentences max).
-    4. Only answer real estate questions.
+    1. Keep responses concise (2-3 sentences max).
+    2. Only answer real estate questions.
   `;
 
   // 4. Call Google Gemini from the Server
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
   
   const payload = {
     contents: [{ parts: [{ text: userText }] }],
