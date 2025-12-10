@@ -11,18 +11,19 @@ if (!fs.existsSync(environmentsDir)) {
 }
 
 // 3. Construct the file content from Netlify Environment Variables
+// We use JSON.stringify to safely quote strings and handle potential special characters
 const envConfigFile = `
 export const environment = {
   production: true,
-  geminiApiKey: '${process.env.GEMINI_API_KEY || ""}',
-  googleScriptUrl: '${process.env.GOOGLE_SCRIPT_URL || ""}',
+  geminiApiKey: ${JSON.stringify(process.env.GEMINI_API_KEY || "")},
+  googleScriptUrl: ${JSON.stringify(process.env.GOOGLE_SCRIPT_URL || "")},
   firebaseConfig: {
-    apiKey: "${process.env.FIREBASE_API_KEY || ""}",
-    authDomain: "${process.env.FIREBASE_AUTH_DOMAIN || ""}",
-    projectId: "${process.env.FIREBASE_PROJECT_ID || ""}",
-    storageBucket: "${process.env.FIREBASE_STORAGE_BUCKET || ""}",
-    messagingSenderId: "${process.env.FIREBASE_SENDER_ID || ""}",
-    appId: "${process.env.FIREBASE_APP_ID || ""}"
+    apiKey: ${JSON.stringify(process.env.FIREBASE_API_KEY || "")},
+    authDomain: ${JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN || "")},
+    projectId: ${JSON.stringify(process.env.FIREBASE_PROJECT_ID || "")},
+    storageBucket: ${JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET || "")},
+    messagingSenderId: ${JSON.stringify(process.env.FIREBASE_SENDER_ID || "")},
+    appId: ${JSON.stringify(process.env.FIREBASE_APP_ID || "")}
   }
 };
 `;
@@ -30,7 +31,8 @@ export const environment = {
 // 4. Write the file
 fs.writeFile(targetPath, envConfigFile, function (err) {
   if (err) {
-    console.log(err);
+    console.error('Error writing environment file:', err);
+    process.exit(1);
   }
   console.log(`Output generated at ${targetPath}`);
 });
