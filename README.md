@@ -88,21 +88,7 @@ ng serve
 
 Navigate to http://localhost:4200/. The application will automatically reload if you change any of the source files.
 
-📂 Project Structure
 
-We follow a modular Feature-First architecture for scalability and maintainability:
-
-src/app/
-├── core/                 # Singletons (Data Services, Models, Global Layout)
-│   ├── services/         # Logic for Firebase, AI, and Lead Gen
-│   ├── models/           # TypeScript Interfaces
-│   └── layout/           # Global Header & Footer
-├── features/             # Main Route Components
-│   ├── home/             # Landing Page (split into sub-components like Hero, About, etc.)
-│   ├── portfolio/        # Grid view of all properties
-│   ├── listing-detail/   # Dynamic single property view
-│   └── chatbot/          # Floating AI widget
-└── shared/               # Reusable UI (Icons, Loaders)
 
 
 👤 Author
