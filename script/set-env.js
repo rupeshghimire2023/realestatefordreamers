@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 // 1. Define the path to the environment file
-const targetPath = path.join(__dirname, '..', 'src', 'environments', 'environment.ts');
+// We use path.resolve to ensure we are targeting the correct absolute path
+const targetPath = path.resolve(__dirname, '../src/environments/environment.ts');
 const environmentsDir = path.dirname(targetPath);
 
 // 2. Ensure the directory exists
@@ -11,7 +12,7 @@ if (!fs.existsSync(environmentsDir)) {
 }
 
 // 3. Construct the file content from Netlify Environment Variables
-// We use JSON.stringify to safely quote strings and handle potential special characters
+// JSON.stringify safely wraps strings in quotes and escapes characters
 const envConfigFile = `
 export const environment = {
   production: true,
