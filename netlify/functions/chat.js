@@ -36,7 +36,7 @@ export default async (req, context) => {
     2. Only answer real estate questions.
   `;
 
-  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemma-3-12b:generateContent?key=${apiKey}`;
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
   
   const payload = {
     contents: [{ parts: [{ text: userText }] }],
