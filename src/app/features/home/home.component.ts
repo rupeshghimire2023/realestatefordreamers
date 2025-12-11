@@ -79,9 +79,17 @@ export class HomeComponent implements OnInit {
 
   // Orchestrator method: Called by Hero and Services components
   handleStartJourney(interestType: string) {
-    if (this.contactComponent) {
-      this.contactComponent.setInterest(interestType);
-      this.scrollTo('contact');
+
+    const targetId = interestType === 'services' ? 'buying' : 'contact';
+    this.scrollTo(targetId);
+
+     // 3. Set the interest in the form (Wait a moment for the component to load)
+    if (targetId === 'contact') {
+      setTimeout(() => {
+        if (this.contactComponent) {
+          this.contactComponent.setInterest(interestType);
+        }
+      }, 500); // 500ms delay gives Angular time to render the deferred component
     }
   }
 

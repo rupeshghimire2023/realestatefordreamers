@@ -94,24 +94,33 @@ export class HeaderComponent {
     this.isMobileMenuOpen.update(v => !v);
   }
 
-  handleNav(item: any) {
+ handleNav(item: any) {
     this.isMobileMenuOpen.set(false);
     
-    // 1. Handle External Route (Portfolio)
+    // 1. External Route
     if (item.action === 'route') {
       this.router.navigate([item.target]);
       return;
     }
 
-    // 2. Handle Scroll Targets
+    // 2. Scroll Logic
+    const scrollFn = () => {
+      // Small timeout to allow View updates if needed
+      setTimeout(() => {
+        const element = document.getElementById(item.target);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          // Only fallback to top if the specific ID isn't found and it's not 'home'
+          if (item.target === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 300); // 300ms matches the @defer hydration speed usually
+    };
+
     if (this.router.url === '/') {
-      this.scrollTo(item.target);
+      scrollFn();
     } else {
-      // If on another page, navigate home first
-      this.router.navigate(['/']).then(() => {
-        // FIX: Increased timeout to 400ms to allow @defer blocks to render
-        setTimeout(() => this.scrollTo(item.target), 400);
-      });
+      this.router.navigate(['/']).then(() => scrollFn());
     }
   }
 

@@ -30,49 +30,61 @@
  
 
 
-   @defer (on viewport) {
+    <!-- 2. ABOUT -->
+  <div id="about"> <!-- FIX: Added wrapper ID -->
+    @defer (on viewport) {
       <app-home-about></app-home-about>
-  } @placeholder {
-    <div class="h-[400px] bg-slate-900"></div>
-  }
+    } @placeholder {
+      <div class="h-[600px] bg-slate-50"></div>
+    }
+  </div>
 
-  @defer (on viewport) {
-     <app-home-featured-portfolio [listings]="featuredListings"></app-home-featured-portfolio>
-  } @placeholder {
-    <div class="h-[400px] bg-slate-900"></div>
-  }
+  <!-- 3. PORTFOLIO PREVIEW -->
+  <div id="portfolio-preview"> <!-- Added ID just in case -->
+    @defer (on viewport) {
+      <app-home-featured-portfolio [listings]="featuredListings"></app-home-featured-portfolio>
+    } @placeholder {
+      <div class="h-[600px] bg-slate-50"></div>
+    }
+  </div>
 
-    <!-- 4. LAZY LOAD: Services -->
-  @defer (on viewport) {
-    <app-home-services (startJourney)="handleStartJourney($event)"></app-home-services>
-  } @placeholder {
-    <div class="h-[400px] bg-slate-900"></div>
-  }
+    <!-- 4. SERVICES (Buying/Selling) -->
+  <div id="buying"> <!-- FIX: Added wrapper ID. This allows nav to find it immediately. -->
+    @defer (on viewport) {
+      <app-home-services (startJourney)="handleStartJourney($event)"></app-home-services>
+    } @placeholder {
+      <div class="h-[400px] bg-slate-900"></div>
+    }
+  </div>
 
 
-  <!-- 4. LAZY LOAD: Services -->
-  @defer (on viewport) {
-   <app-home-mortgage-calculator></app-home-mortgage-calculator>
-    <app-home-value></app-home-value>
-  } @placeholder {
-    <div class="h-[400px] bg-slate-900"></div>
-  }
+  <!-- 5. CALCULATOR & VALUE -->
+  <div id="calculator"> <!-- FIX: Added wrapper ID -->
+    @defer (on viewport) {
+      <app-home-value></app-home-value>
+      <app-home-mortgage-calculator></app-home-mortgage-calculator>
+    } @placeholder {
+      <div class="h-[800px] bg-slate-50"></div>
+    }
+  </div>
+  
+  <!-- 6. TESTIMONIALS (Stories) -->
+  <div id="testimonials"> <!-- FIX: Added wrapper ID -->
+    @defer (on viewport) {
+      <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
+    } @placeholder {
+      <div class="h-[500px] bg-amber-50"></div>
+    }
+  </div>
 
-  <!-- 6. LAZY LOAD: Testimonials -->
-  @defer (on viewport) {
-    <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
-  } @placeholder {
-    <div class="h-[500px] bg-amber-50"></div>
-  }
-
-  <!-- 7. LAZY LOAD: Contact (Always load last) -->
-  @defer (on viewport) {
-    <div id="contact"> <!-- Keep ID here for scrolling -->
+  <!-- 7. CONTACT -->
+  <div id="contact"> <!-- This was already correct, keeping it. -->
+    @defer (on viewport) {
       <app-home-contact></app-home-contact>
-    </div>
-  } @placeholder {
-    <div class="h-[600px] bg-white"></div>
-  }
+    } @placeholder {
+      <div class="h-[600px] bg-white"></div>
+    }
+  </div>
 
   <!-- Blog Preview Section -->
   <section id="blog" class="py-24 bg-white" *ngIf="recentPosts.length > 0">
