@@ -21,7 +21,7 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
             <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-slate-100 rounded-full opacity-50 z-0"></div>
             
             <img src="https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fkritika_pic_four.JPEG?alt=media&token=b3c0220f-1357-4cd8-843b-281796ffd43a?auto=format&fit=crop&q=80&w=800" 
-                 class="relative z-10 rounded-2xl shadow-2xl w-full object-cover h-[600px]" alt="Realtor Portrait">
+                 class="relative z-10 rounded-2xl shadow-2xl w-full object-cover h-[600px]" alt="Realtor Portrait" loading="lazy" fetchpriority="low">
             
             <!-- Experience Badge -->
             <div class="absolute bottom-8 -left-6 bg-white p-6 rounded-xl shadow-xl z-20 border-l-4 border-amber-500">

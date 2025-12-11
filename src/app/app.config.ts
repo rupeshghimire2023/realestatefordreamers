@@ -1,5 +1,5 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideRouter, withComponentInputBinding,withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 // IMPORT THESE:
@@ -9,7 +9,13 @@ import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withComponentInputBinding()),
+    provideRouter(routes,
+      withComponentInputBinding(),
+    withInMemoryScrolling({
+        scrollPositionRestoration: 'top', // Scroll to top on navigation
+        anchorScrolling: 'enabled'        // Allow anchor scrolling
+      })
+  ),
     
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     

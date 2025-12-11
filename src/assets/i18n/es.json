@@ -1,0 +1,18 @@
+{
+  "NAV": {
+    "HOME": "Inicio",
+    "ABOUT": "Sobre Mí",
+    "PORTFOLIO": "Portafolio",
+    "SERVICES": "Servicios",
+    "BLOG": "Blog",
+    "STORIES": "Historias",
+    "CTA": "Hablemos"
+  },
+  "HERO": {
+    "SUBTITLE": "Bienes Raíces en Georgia",
+    "TITLE": "Encuentra Tu Lugar en el <br/> <span class='text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500'>Mundo</span>",
+    "DESC": "Ya sea que compres tu primera casa o vendas una propiedad preciada, hacemos realidad tus sueños inmobiliarios.",
+    "BTN_SERVICES": "Nuestros Servicios",
+    "BTN_LEARN": "Aprende Más"
+  }
+}

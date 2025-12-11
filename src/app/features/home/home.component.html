@@ -8,7 +8,7 @@
   
   <app-home-hero (startJourney)="handleStartJourney($event)"></app-home-hero>
 
-  <app-home-about></app-home-about>
+  <!-- <app-home-about></app-home-about>
 
   <app-home-featured-portfolio [listings]="featuredListings"></app-home-featured-portfolio>
 
@@ -20,6 +20,60 @@
 
   
   <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
+
+  <app-home-contact></app-home-contact> -->
+
+  <!-- 4. LAZY LOAD: Services -->
+
+
+
+ 
+
+
+   @defer (on viewport) {
+      <app-home-about></app-home-about>
+  } @placeholder {
+    <div class="h-[400px] bg-slate-900"></div>
+  }
+
+  @defer (on viewport) {
+     <app-home-featured-portfolio [listings]="featuredListings"></app-home-featured-portfolio>
+  } @placeholder {
+    <div class="h-[400px] bg-slate-900"></div>
+  }
+
+    <!-- 4. LAZY LOAD: Services -->
+  @defer (on viewport) {
+    <app-home-services (startJourney)="handleStartJourney($event)"></app-home-services>
+  } @placeholder {
+    <div class="h-[400px] bg-slate-900"></div>
+  }
+
+
+  <!-- 4. LAZY LOAD: Services -->
+  @defer (on viewport) {
+   <app-home-mortgage-calculator></app-home-mortgage-calculator>
+    <app-home-value></app-home-value>
+  } @placeholder {
+    <div class="h-[400px] bg-slate-900"></div>
+  }
+
+  <!-- 6. LAZY LOAD: Testimonials -->
+  @defer (on viewport) {
+    <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
+  } @placeholder {
+    <div class="h-[500px] bg-amber-50"></div>
+  }
+
+  <!-- 7. LAZY LOAD: Contact (Always load last) -->
+  @defer (on viewport) {
+    <div id="contact"> <!-- Keep ID here for scrolling -->
+      <app-home-contact></app-home-contact>
+    </div>
+  } @placeholder {
+    <div class="h-[600px] bg-white"></div>
+  }
+
   <!-- Blog Preview Section -->
   <section id="blog" class="py-24 bg-white" *ngIf="recentPosts.length > 0">
     <div class="container mx-auto px-6">
@@ -49,6 +103,6 @@
     </div>
   </section>
 
-  <app-home-contact></app-home-contact>
+  
 
 </div>

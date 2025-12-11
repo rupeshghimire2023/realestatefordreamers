@@ -1,0 +1,18 @@
+{
+  "NAV": {
+    "HOME": "Home",
+    "ABOUT": "About",
+    "PORTFOLIO": "Portfolio",
+    "SERVICES": "Services",
+    "BLOG": "Blog",
+    "STORIES": "Stories",
+    "CTA": "Let's Talk"
+  },
+  "HERO": {
+    "SUBTITLE": "Georgia Real Estate",
+    "TITLE": "Find Your Place in the <br/> <span class='text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500'>World</span>",
+    "DESC": "Whether you are buying your first home or selling a cherished estate, we make your real estate dreams a reality.",
+    "BTN_SERVICES": "Our Services",
+    "BTN_LEARN": "Learn More"
+  }
+}

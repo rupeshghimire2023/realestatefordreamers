@@ -22,8 +22,9 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
           loop 
           [muted]="true" 
           playsinline 
-          preload="auto"
+          preload="true"
           class="w-full h-full object-cover"
+          fetchpriority="high"
           poster="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=2070">
           <source src="https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fbackground_video.mp4?alt=media&token=70d6dc58-2bb4-4e3e-b168-fddebaa8f6bd" type="video/mp4">
           Your browser does not support the video tag.

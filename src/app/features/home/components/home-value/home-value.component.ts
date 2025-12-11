@@ -1,8 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core'; // Import NgZone
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { LeadService } from '../../../../core/services/lead.service';
+
+// Declare google variable to avoid TypeScript errors
+declare var google: any;
 
 @Component({
   selector: 'app-home-value',
@@ -63,8 +66,15 @@ import { LeadService } from '../../../../core/services/lead.service';
               <div class="space-y-4 mb-6">
                 <div>
                   <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Property Address</label>
-                  <input formControlName="address" type="text" placeholder="Enter your address..." 
-                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                  
+                  <input #addressInput
+                         formControlName="address" 
+                         type="text" 
+                         placeholder="Enter your address..." 
+                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all placeholder:text-slate-400">
+                  
+                  <!-- Validation Error for Georgia -->
+                  <p *ngIf="locationError" class="text-red-500 text-xs mt-1">{{ locationError }}</p>
                 </div>
                 
                 <div class="grid grid-cols-3 gap-3">
@@ -118,12 +128,16 @@ import { LeadService } from '../../../../core/services/lead.service';
     </section>
   `
 })
-export class HomeValueComponent {
+export class HomeValueComponent implements AfterViewInit {
   private fb = inject(FormBuilder);
   private leadService = inject(LeadService);
+  private ngZone = inject(NgZone); // Inject NgZone
   
+  @ViewChild('addressInput') addressInput!: ElementRef;
+
   isSubmitting = false;
   submitSuccess = false;
+  locationError = '';
   valuationForm: FormGroup;
 
   constructor() {
@@ -139,13 +153,57 @@ export class HomeValueComponent {
     });
   }
 
+  ngAfterViewInit() {
+    this.initAutocomplete();
+  }
+
+  initAutocomplete() {
+    if (typeof google === 'undefined') return;
+
+    const georgiaBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(30.355757, -85.605165),
+      new google.maps.LatLng(35.000659, -80.839729)
+    );
+
+    const autocomplete = new google.maps.places.Autocomplete(this.addressInput.nativeElement, {
+      componentRestrictions: { country: 'us' },
+      fields: ['formatted_address', 'address_components'],
+      types: ['address'],
+      bounds: georgiaBounds,
+      strictBounds: false
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      // FIX: Wrap the callback in ngZone.run() to trigger Angular Change Detection
+      this.ngZone.run(() => {
+        const place = autocomplete.getPlace();
+        
+        if (!place.address_components) return;
+
+        const stateComponent = place.address_components.find((c: any) => 
+          c.short_name === 'GA' && c.types.includes('administrative_area_level_1')
+        );
+
+        if (!stateComponent) {
+          this.locationError = 'Please select a valid address within Georgia.';
+          this.valuationForm.get('address')?.setValue('');
+          return;
+        }
+
+        this.locationError = '';
+        // Set the value directly from the API result
+        this.valuationForm.patchValue({ 
+          address: place.formatted_address || this.addressInput.nativeElement.value 
+        });
+      });
+    });
+  }
+
   onSubmit() {
     if (this.valuationForm.valid) {
       this.isSubmitting = true;
       const val = this.valuationForm.value;
 
-      // Construct a specific message for the "selling" interest
-      // This ensures your AI Agent sends the "Seller's Roadmap"
       const message = `HOMEPAGE VALUATION REQUEST:
       Address: ${val.address}
       Details: ${val.beds} Beds, ${val.baths} Baths, ${val.sqft} SqFt.`;
@@ -155,7 +213,7 @@ export class HomeValueComponent {
         lastName: val.lastName,
         email: val.email,
         phone: val.phone,
-        interest: 'selling', // Triggers Seller AI flow
+        interest: 'selling',
         message: message
       };
 

@@ -107,8 +107,10 @@ export class HeaderComponent {
     if (this.router.url === '/') {
       this.scrollTo(item.target);
     } else {
+      // If on another page, navigate home first
       this.router.navigate(['/']).then(() => {
-        setTimeout(() => this.scrollTo(item.target), 100);
+        // FIX: Increased timeout to 400ms to allow @defer blocks to render
+        setTimeout(() => this.scrollTo(item.target), 400);
       });
     }
   }
