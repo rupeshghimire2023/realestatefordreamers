@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  geminiApiKey: 'AIzaSyCpTzRh7Aq2IB1wEWjPq-fTZUDciJcAuxI', // Paste key here
+  geminiApiKey: '--', // Paste key here
   googleScriptUrl: 'https://script.google.com/macros/s/AKfycbxJga0ayKnO8iMo9pu9y1DkDywEPbde5IUt2JRPXYWgZjY5NJOTjR9kkmEHc6LwmTUWsQ/exec', // Paste URL here
   // Your web app's Firebase configuration
   firebaseConfig: {
