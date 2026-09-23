@@ -83,7 +83,7 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
             <!-- <a href="#" class="hover:text-slate-300 transition-colors">Privacy Policy</a>
             <a href="#" class="hover:text-slate-300 transition-colors">Terms of Service</a> -->
             <span class="text-slate-700">|</span>
-            <p>Designed and built by <a href="https://relaunchable.us">Relaunchable</a> for Real Estate for Dreamers</p>
+            <p>Designed and built by <a href="https://relaunchable.us" target="_blank" rel="noopener noreferrer">Relaunchable</a> for Real Estate for Dreamers</p>
           </div>
         </div>
       </div>
