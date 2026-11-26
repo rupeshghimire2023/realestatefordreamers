@@ -1,6 +1,6 @@
 [build]
-  # This runs your script to generate environment.ts, then builds Angular
-  command = "npm run build" 
+  # Generates environment.ts from Netlify's environment variables, then builds Angular
+  command = "npm run build:netlify"
   publish = "dist/real-estate-dreamers/browser"
 
 [build.environment]

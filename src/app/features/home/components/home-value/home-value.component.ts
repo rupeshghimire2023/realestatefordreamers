@@ -1,15 +1,19 @@
-import { Component, inject, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core'; // Import NgZone
+import { Component, ElementRef, ChangeDetectorRef, afterNextRender, inject, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { LeadService } from '../../../../core/services/lead.service';
+import { MapsLoaderService } from '../../../../core/services/maps-loader.service';
+import { LEAD_LIMITS, describeHome } from '../../../../core/utils/lead';
+import { phoneValidator } from '../../../../shared/validators/phone.validator';
 
 // Declare google variable to avoid TypeScript errors
 declare var google: any;
 
+const GEORGIA_BOUNDS = { south: 30.355757, west: -85.605165, north: 35.000659, east: -80.839729 };
+
 @Component({
   selector: 'app-home-value',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IconComponent],
   template: `
     <section id="valuation" class="py-24 bg-white relative overflow-hidden">
@@ -65,32 +69,37 @@ declare var google: any;
               <!-- Property Details -->
               <div class="space-y-4 mb-6">
                 <div>
-                  <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Property Address</label>
+                  <label for="valuation-address" class="block text-xs font-bold text-slate-500 uppercase mb-1">Property Address</label>
                   
                   <input #addressInput
+                         id="valuation-address"
                          formControlName="address" 
                          type="text" 
+                         autocomplete="street-address"
+                         [maxlength]="limits.address"
                          placeholder="Enter your address..." 
+                         [attr.aria-invalid]="!!locationError()"
+                         aria-describedby="valuation-address-error"
                          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all placeholder:text-slate-400">
                   
                   <!-- Validation Error for Georgia -->
-                  <p *ngIf="locationError" class="text-red-500 text-xs mt-1">{{ locationError }}</p>
+                  <p id="valuation-address-error" *ngIf="locationError()" class="text-red-500 text-xs mt-1">{{ locationError() }}</p>
                 </div>
                 
                 <div class="grid grid-cols-3 gap-3">
                   <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Beds</label>
-                    <input formControlName="beds" type="number" placeholder="4" 
+                    <label for="valuation-beds" class="block text-xs font-bold text-slate-500 uppercase mb-1">Beds</label>
+                    <input id="valuation-beds" formControlName="beds" type="number" min="0" placeholder="4" 
                            class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
                   </div>
                   <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Baths</label>
-                    <input formControlName="baths" type="number" placeholder="3" 
+                    <label for="valuation-baths" class="block text-xs font-bold text-slate-500 uppercase mb-1">Baths</label>
+                    <input id="valuation-baths" formControlName="baths" type="number" min="0" step="0.5" placeholder="3" 
                            class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
                   </div>
                   <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Sq Ft</label>
-                    <input formControlName="sqft" type="number" placeholder="2500" 
+                    <label for="valuation-sqft" class="block text-xs font-bold text-slate-500 uppercase mb-1">Sq Ft</label>
+                    <input id="valuation-sqft" formControlName="sqft" type="number" min="0" placeholder="2500" 
                            class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
                   </div>
                 </div>
@@ -99,27 +108,31 @@ declare var google: any;
               <!-- Contact Details -->
               <div class="space-y-4 mb-6 pt-6 border-t border-slate-100">
                 <div class="grid grid-cols-2 gap-3">
-                  <input formControlName="firstName" type="text" placeholder="First Name" 
+                  <input formControlName="firstName" type="text" placeholder="First Name" aria-label="First name" autocomplete="given-name" [maxlength]="limits.name"
                          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
-                  <input formControlName="lastName" type="text" placeholder="Last Name" 
+                  <input formControlName="lastName" type="text" placeholder="Last Name" aria-label="Last name" autocomplete="family-name" [maxlength]="limits.name"
                          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
                 </div>
-                <input formControlName="email" type="email" placeholder="Email Address" 
+                <input formControlName="email" type="email" placeholder="Email Address" aria-label="Email address" autocomplete="email" [maxlength]="limits.email"
                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
-                <input formControlName="phone" type="tel" placeholder="Phone Number" 
+                <input formControlName="phone" type="tel" placeholder="Phone Number" aria-label="Phone number" autocomplete="tel" [maxlength]="limits.phone"
+                       [class.border-red-500]="phoneInvalid()"
+                       [attr.aria-invalid]="phoneInvalid()"
                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                <p *ngIf="phoneInvalid()" class="text-red-500 text-xs -mt-2">Please enter a valid phone number (10+ digits)</p>
               </div>
 
               <button type="submit" 
-                      [disabled]="valuationForm.invalid || isSubmitting"
+                      [disabled]="valuationForm.invalid || isSubmitting()"
                       class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-amber-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2">
-                <span *ngIf="isSubmitting" class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
-                {{ isSubmitting ? 'Sending Request...' : 'Get My Estimate' }}
+                <span *ngIf="isSubmitting()" class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
+                {{ isSubmitting() ? 'Sending Request...' : 'Get My Estimate' }}
               </button>
               
-              <p *ngIf="submitSuccess" class="mt-3 text-green-600 text-center font-bold text-sm bg-green-50 py-2 rounded-lg">
+              <p *ngIf="submitSuccess()" role="status" class="mt-3 text-green-600 text-center font-bold text-sm bg-green-50 py-2 rounded-lg">
                  Request Sent! Check your email shortly.
               </p>
+              <p *ngIf="submitError()" role="alert" class="mt-3 text-red-600 text-center font-medium text-sm bg-red-50 py-2 rounded-lg">{{ submitError() }}</p>
             </form>
           </div>
 
@@ -128,106 +141,109 @@ declare var google: any;
     </section>
   `
 })
-export class HomeValueComponent implements AfterViewInit {
-  private fb = inject(FormBuilder);
+export class HomeValueComponent {
+  private fb = inject(FormBuilder).nonNullable;
   private leadService = inject(LeadService);
-  private ngZone = inject(NgZone); // Inject NgZone
-  
-  @ViewChild('addressInput') addressInput!: ElementRef;
+  private mapsLoader = inject(MapsLoaderService);
+  private cdr = inject(ChangeDetectorRef);
+  protected readonly limits = LEAD_LIMITS;
 
-  isSubmitting = false;
-  submitSuccess = false;
-  locationError = '';
-  valuationForm: FormGroup;
+  private addressInput = viewChild.required<ElementRef<HTMLInputElement>>('addressInput');
+
+  isSubmitting = signal(false);
+  submitSuccess = signal(false);
+  submitError = signal('');
+  locationError = signal('');
+
+  readonly valuationForm = this.fb.group({
+    address: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.address)]],
+    beds: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),
+    baths: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),
+    sqft: this.fb.control<number | null>(null, [Validators.required, Validators.min(0)]),
+    firstName: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.name)]],
+    lastName: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.name)]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(LEAD_LIMITS.email)]],
+    phone: ['', [Validators.required, phoneValidator]]
+  });
 
   constructor() {
-    this.valuationForm = this.fb.group({
-      address: ['', Validators.required],
-      beds: ['', Validators.required],
-      baths: ['', Validators.required],
-      sqft: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required]
+    // Address autocomplete is an enhancement; the form still works without it.
+    afterNextRender(() => {
+      this.mapsLoader.load()
+        .then(() => this.initAutocomplete())
+        .catch(err => console.warn('Address autocomplete unavailable:', err));
     });
   }
 
-  ngAfterViewInit() {
-    this.initAutocomplete();
+  phoneInvalid(): boolean {
+    const phone = this.valuationForm.controls.phone;
+    return phone.invalid && phone.touched;
   }
 
-  initAutocomplete() {
+  private initAutocomplete() {
     if (typeof google === 'undefined') return;
 
-    const georgiaBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(30.355757, -85.605165),
-      new google.maps.LatLng(35.000659, -80.839729)
-    );
-
-    const autocomplete = new google.maps.places.Autocomplete(this.addressInput.nativeElement, {
+    const autocomplete = new google.maps.places.Autocomplete(this.addressInput().nativeElement, {
       componentRestrictions: { country: 'us' },
       fields: ['formatted_address', 'address_components'],
       types: ['address'],
-      bounds: georgiaBounds,
+      bounds: GEORGIA_BOUNDS,
       strictBounds: false
     });
 
+    // This callback comes from Google's script, so Angular isn't notified on its own;
+    // markForCheck() refreshes the error message and the submit button.
     autocomplete.addListener('place_changed', () => {
-      // FIX: Wrap the callback in ngZone.run() to trigger Angular Change Detection
-      this.ngZone.run(() => {
-        const place = autocomplete.getPlace();
-        
-        if (!place.address_components) return;
+      const place = autocomplete.getPlace();
+      if (!place.address_components) return;
 
-        const stateComponent = place.address_components.find((c: any) => 
-          c.short_name === 'GA' && c.types.includes('administrative_area_level_1')
-        );
+      const inGeorgia = place.address_components.some((c: any) =>
+        c.short_name === 'GA' && c.types.includes('administrative_area_level_1')
+      );
 
-        if (!stateComponent) {
-          this.locationError = 'Please select a valid address within Georgia.';
-          this.valuationForm.get('address')?.setValue('');
-          return;
-        }
-
-        this.locationError = '';
-        // Set the value directly from the API result
-        this.valuationForm.patchValue({ 
-          address: place.formatted_address || this.addressInput.nativeElement.value 
+      if (inGeorgia) {
+        this.locationError.set('');
+        this.valuationForm.patchValue({
+          address: place.formatted_address || this.addressInput().nativeElement.value
         });
-      });
+      } else {
+        this.locationError.set('Please select a valid address within Georgia.');
+        this.valuationForm.controls.address.setValue('');
+      }
+      this.cdr.markForCheck();
     });
   }
 
   onSubmit() {
-    if (this.valuationForm.valid) {
-      this.isSubmitting = true;
-      const val = this.valuationForm.value;
+    if (this.valuationForm.invalid) return;
+    this.isSubmitting.set(true);
+    this.submitError.set('');
+    const val = this.valuationForm.getRawValue();
 
-      const message = `HOMEPAGE VALUATION REQUEST:
-      Address: ${val.address}
-      Details: ${val.beds} Beds, ${val.baths} Baths, ${val.sqft} SqFt.`;
+    const message = [
+      'HOMEPAGE VALUATION REQUEST:',
+      `Address: ${val.address}`,
+      `Details: ${describeHome(val)}`
+    ].join('\n');
 
-      const leadData = {
-        firstName: val.firstName,
-        lastName: val.lastName,
-        email: val.email,
-        phone: val.phone,
-        interest: 'selling',
-        message: message
-      };
-
-      this.leadService.submitLead(leadData)
-        .then(() => {
-          this.isSubmitting = false;
-          this.submitSuccess = true;
-          this.valuationForm.reset();
-          setTimeout(() => this.submitSuccess = false, 5000);
-        })
-        .catch(err => {
-          console.error('Error submitting form', err);
-          this.isSubmitting = false;
-        });
-    }
+    this.leadService.submitLead({
+      firstName: val.firstName,
+      lastName: val.lastName,
+      email: val.email,
+      phone: val.phone,
+      interest: 'selling',
+      message
+    })
+      .then(() => {
+        this.isSubmitting.set(false);
+        this.submitSuccess.set(true);
+        this.valuationForm.reset();
+        setTimeout(() => this.submitSuccess.set(false), 5000);
+      })
+      .catch(err => {
+        console.error('Error submitting form', err);
+        this.isSubmitting.set(false);
+        this.submitError.set("We couldn't send your request. Please try again, or call or email us directly.");
+      });
   }
 }

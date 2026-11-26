@@ -15,31 +15,63 @@ export default async (req, context) => {
     return new Response("Method Not Allowed", { status: 405 });
   }
 
-  const body = await req.json();
-  const userText = body.text;
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return new Response("Invalid JSON", { status: 400 });
+  }
 
-  // 3. Define Persona
+  const MAX_TEXT = 1000;
+  const MAX_HISTORY = 10;
+  const userText = typeof body.text === "string" ? body.text.trim().slice(0, MAX_TEXT) : "";
+  if (!userText) {
+    return new Response(JSON.stringify({ reply: "Please type a question and I'll do my best to help!" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  // Previous turns, oldest first. Gemini needs the conversation to start with a
+  // user turn and alternate roles, so leading bot messages (the greeting) are
+  // dropped and consecutive same-role messages are merged.
+  const history = Array.isArray(body.history) ? body.history.slice(-MAX_HISTORY) : [];
+  const contents = [];
+  for (const turn of [...history, { role: "user", text: userText }]) {
+    const role = turn?.role === "model" ? "model" : "user";
+    const text = typeof turn?.text === "string" ? turn.text.slice(0, MAX_TEXT) : "";
+    if (!text || (contents.length === 0 && role === "model")) continue;
+    const last = contents[contents.length - 1];
+    if (last && last.role === role) {
+      last.parts[0].text += "\n" + text;
+    } else {
+      contents.push({ role, parts: [{ text }] });
+    }
+  }
+
+  // 3. Define Persona (keep contact details in sync with src/app/core/config/realtor-data.ts)
   const systemPrompt = `
     You are Kritika Katwal, a Top Producer Realtor at Main Street Realty Group in Georgia.
-    
+
     Tone & Personality:
     - Friendly, professional, empathetic, and knowledgeable.
     - Use "I", "me", and "my".
     - You have a global background (Nepal -> India -> Australia -> Atlanta).
-    
+
     Contact Info (Provide ONLY if asked):
-    - Phone: (678) 663-3569
-    - Email: hello@realestatefordreamers.com
-    
+    - Phone: (470) 652-6362
+    - Email: realestatefordreamers@gmail.com
+
     Guidelines:
     1. Keep responses concise (2-3 sentences max).
     2. Only answer real estate questions.
+    3. If the visitor wants to buy, sell, or book a showing, invite them to share their details in the contact form on the website.
   `;
 
   const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`;
-  
+
   const payload = {
-    contents: [{ parts: [{ text: userText }] }],
+    contents,
     systemInstruction: { parts: [{ text: systemPrompt }] }
   };
 

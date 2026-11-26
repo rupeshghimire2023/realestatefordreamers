@@ -1,38 +1,63 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore'; // Import Firestore
+import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
 import { LeadData } from '../models/models';
 import { environment } from '../../../environments/environment';
+import { withTimeout } from '../utils/with-timeout';
+
+// How long the form waits for each destination before giving up on it.
+// A Firestore write that times out stays queued in the offline cache and is
+// still sent when the connection comes back.
+const FIRESTORE_TIMEOUT_MS = 10_000;
+const SHEET_TIMEOUT_MS = 15_000;
 
 @Injectable({ providedIn: 'root' })
 export class LeadService {
-  private firestore = inject(Firestore); // Inject Firestore
+  private firestore = inject(Firestore);
   private googleScriptUrl = environment.googleScriptUrl;
 
-  async submitLead(data: LeadData) {
-    // 1. Save to Firebase (For Admin Dashboard)
-    try {
-      const leadsRef = collection(this.firestore, 'leads');
-      await addDoc(leadsRef, {
-        ...data,
-        timestamp: new Date(), // Add server timestamp
-        status: 'new' // Mark as unread
-      });
-      console.log("Lead saved to Firestore");
-    } catch (e) {
-      console.error("Error saving to Firestore:", e);
-    }
+  /**
+   * Saves the lead to Firestore (admin record) and sends it to Google Apps Script
+   * (Sheet + email automation) in parallel. Resolves if at least one succeeds, so the
+   * lead is never lost silently; rejects only when both fail or time out.
+   */
+  async submitLead(data: LeadData): Promise<void> {
+    const results = await Promise.allSettled([
+      withTimeout(this.saveToFirestore(data), FIRESTORE_TIMEOUT_MS, 'Saving lead to Firestore'),
+      this.sendToSheet(data)
+    ]);
 
-    // 2. Send to Google Sheets (For Email Automation)
+    results.forEach((r, i) => {
+      if (r.status === 'rejected') {
+        console.error(i === 0 ? 'Error saving lead to Firestore:' : 'Error sending lead to Google Sheet:', r.reason);
+      }
+    });
+
+    if (results.every(r => r.status === 'rejected')) {
+      throw new Error('Lead could not be delivered');
+    }
+  }
+
+  private async saveToFirestore(data: LeadData) {
+    await addDoc(collection(this.firestore, 'leads'), {
+      ...data,
+      timestamp: serverTimestamp(),
+      status: 'new'
+    });
+  }
+
+  private async sendToSheet(data: LeadData) {
     if (!this.googleScriptUrl || this.googleScriptUrl.includes('YOUR_GOOGLE')) {
-      console.error('Google Script URL is missing');
-      return;
+      throw new Error('Google Script URL is missing');
     }
-
-    return fetch(this.googleScriptUrl, {
+    // Apps Script doesn't answer CORS preflights, so this is a "simple" no-cors request:
+    // the response is opaque, but a network failure or timeout still rejects.
+    // (no-cors only allows a text/plain body; the script reads it with JSON.parse.)
+    await fetch(this.googleScriptUrl, {
       method: 'POST',
-      mode: 'no-cors', 
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data),
+      signal: AbortSignal.timeout(SHEET_TIMEOUT_MS)
     });
   }
 }

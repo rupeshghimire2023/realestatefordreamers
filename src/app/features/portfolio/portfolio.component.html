@@ -21,7 +21,7 @@
   <div class="container mx-auto px-6 -mt-20 relative z-20 pb-20">
     
     <!-- 1. LOADING STATE (Skeleton) -->
-    <ng-container *ngIf="isLoading; else loadedContent">
+    <ng-container *ngIf="listings() === undefined; else loadedContent">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Show 6 skeleton cards while loading -->
         <div *ngFor="let i of [1,2,3,4,5,6]" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col h-[500px]">
@@ -41,6 +41,7 @@
 
     <!-- 2. LOADED CONTENT -->
     <ng-template #loadedContent>
+      <ng-container *ngIf="listings() as listings">
       
       <!-- Empty State (No Listings Found) -->
       <div *ngIf="listings.length === 0" class="bg-white p-12 rounded-3xl shadow-lg text-center border border-slate-100">
@@ -53,14 +54,14 @@
 
       <!-- Real Listings Grid -->
       <div *ngIf="listings.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div *ngFor="let property of listings" 
+        <a *ngFor="let property of listings" 
              [routerLink]="['/listing', property.id]" 
              class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-slate-100 flex flex-col animate-fadeInUp">
           
           <!-- Image Container -->
           <div class="relative h-72 overflow-hidden">
             <div class="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/0 transition-colors z-10"></div>
-            <img [src]="property.imageUrl" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            <img [src]="property.imageUrl" [alt]="property.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             
             <!-- Status Badge -->
             <div class="absolute top-4 left-4 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg z-20"
@@ -110,8 +111,9 @@
                </span>
             </div>
           </div>
-        </div>
+        </a>
       </div>
+      </ng-container>
     </ng-template>
 
   </div>

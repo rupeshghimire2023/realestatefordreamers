@@ -1,33 +1,36 @@
-import { Component, ElementRef, ViewChild, AfterViewChecked, inject } from '@angular/core';
+import { Component, ElementRef, Injector, afterNextRender, effect, inject, signal, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../shared/components/icon/icon.component';
 import { GeminiService } from '../../core/services/gemini.service';
 import { ChatMessage } from '../../core/models/models';
+import { ConfigService } from '../../core/services/config.service';
 
 @Component({
   selector: 'app-chatbot',
-  standalone: true,
   imports: [CommonModule, FormsModule, IconComponent],
   template: `
     <!-- Floating Action Button (Face Icon when closed) -->
-    <button (click)="toggleChat()"
+    <button type="button" (click)="toggleChat()"
+            [attr.aria-label]="isOpen() ? 'Close chat' : 'Chat with ' + cfg.realtor.firstName"
+            [attr.aria-expanded]="isOpen()"
+            aria-controls="chat-window"
             class="fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50 group border-4 border-white overflow-hidden bg-slate-900">
       
       <!-- Show Face when closed -->
-      <img *ngIf="!isOpen" src="https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fkritika_profile.JPG?alt=media&token=fbb83206-b27a-4eb2-9262-cd3f3c0af8c7" class="w-full h-full object-cover" alt="Chat with Kritika">
+      <img *ngIf="!isOpen()" [src]="cfg.realtor.avatarUrl" class="w-full h-full object-cover" alt="">
       
       <!-- Show X when open -->
-      <div *ngIf="isOpen" class="w-full h-full flex items-center justify-center bg-slate-900 text-white">
+      <div *ngIf="isOpen()" class="w-full h-full flex items-center justify-center bg-slate-900 text-white">
         <app-icon name="x" class="w-6 h-6"></app-icon>
       </div>
       
       <!-- Notification Dot -->
-      <span *ngIf="!isOpen && hasUnread" class="absolute top-0 right-0 w-4 h-4 bg-amber-500 rounded-full border-2 border-white animate-pulse"></span>
+      <span *ngIf="!isOpen() && hasUnread()" class="absolute top-0 right-0 w-4 h-4 bg-amber-500 rounded-full border-2 border-white animate-pulse"></span>
     </button>
 
     <!-- Chat Window -->
-    <div *ngIf="isOpen" 
+    <div *ngIf="isOpen()" id="chat-window" role="dialog" [attr.aria-label]="'Chat with ' + cfg.realtor.firstName"
          class="fixed bottom-24 right-6 w-[calc(100vw-3rem)] md:w-96 h-[550px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden z-50 border border-slate-100 animate-slideUp origin-bottom-right font-sans">
       
       <!-- Header: Personal Profile -->
@@ -37,14 +40,14 @@ import { ChatMessage } from '../../core/models/models';
         
         <!-- Avatar -->
         <div class="relative shrink-0">
-          <img src="https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fkritika_profile.JPG?alt=media&token=fbb83206-b27a-4eb2-9262-cd3f3c0af8c7" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-lg">
+          <img [src]="cfg.realtor.avatarUrl" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-lg">
           <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-slate-900 rounded-full"></div>
         </div>
         
         <!-- Info -->
         <div class="relative">
-          <h3 class="font-serif font-bold text-lg leading-none">Kritika Katwal</h3>
-          <p class="text-xs text-slate-400 mt-1">Top Producer | Realtor®</p>
+          <h3 class="font-serif font-bold text-lg leading-none">{{ cfg.realtor.fullName }}</h3>
+          <p class="text-xs text-slate-400 mt-1">{{ cfg.realtor.title }}</p>
           <p class="text-[10px] text-amber-500 font-medium flex items-center gap-1 mt-0.5">
             <span class="w-1 h-1 bg-amber-500 rounded-full animate-pulse"></span> Replies Instantly
           </p>
@@ -52,28 +55,28 @@ import { ChatMessage } from '../../core/models/models';
       </div>
 
       <!-- Messages Area -->
-      <div class="flex-1 overflow-y-auto p-4 space-y-6 bg-slate-50 scroll-smooth" #scrollContainer>
+      <div class="flex-1 overflow-y-auto p-4 space-y-6 bg-slate-50 scroll-smooth" #scrollContainer role="log" aria-live="polite">
         
         <!-- Date Separator -->
         <div class="flex justify-center">
            <span class="text-[10px] uppercase tracking-widest text-slate-400 font-medium">Today</span>
         </div>
 
-        <div *ngFor="let msg of messages" 
+        <div *ngFor="let msg of messages()" 
              [ngClass]="{'flex justify-end': msg.isUser, 'flex justify-start items-end gap-2': !msg.isUser}">
           
           <!-- Bot Avatar (Only show for bot messages) -->
-          <img *ngIf="!msg.isUser" src="https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fkritika_profile.JPG?alt=media&token=fbb83206-b27a-4eb2-9262-cd3f3c0af8c7" class="w-8 h-8 rounded-full object-cover border border-slate-200 mb-1 shadow-sm">
+          <img *ngIf="!msg.isUser" [src]="cfg.realtor.avatarUrl" alt="" class="w-8 h-8 rounded-full object-cover border border-slate-200 mb-1 shadow-sm">
 
           <!-- Message Bubble -->
           <div [ngClass]="{
               'bg-slate-900 text-white rounded-2xl rounded-tr-none shadow-md': msg.isUser, 
               'bg-white text-slate-700 border border-slate-100 rounded-2xl rounded-tl-none shadow-sm': !msg.isUser
             }"
-               class="max-w-[80%] p-3.5 text-sm leading-relaxed relative group">
+               class="max-w-[80%] p-3.5 text-sm leading-relaxed relative group whitespace-pre-line">
             
             <!-- Name label for Bot -->
-            <p *ngIf="!msg.isUser" class="text-[10px] font-bold text-amber-600 mb-1 uppercase tracking-wide">Kritika</p>
+            <p *ngIf="!msg.isUser" class="text-[10px] font-bold text-amber-600 mb-1 uppercase tracking-wide">{{ cfg.realtor.firstName }}</p>
             
             {{ msg.text }}
             
@@ -86,8 +89,8 @@ import { ChatMessage } from '../../core/models/models';
         </div>
 
         <!-- Typing Indicator -->
-        <div *ngIf="isTyping" class="flex justify-start items-end gap-2 animate-fadeIn">
-           <img src="https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fkritika_profile.JPG?alt=media&token=fbb83206-b27a-4eb2-9262-cd3f3c0af8c7" class="w-6 h-6 rounded-full object-cover grayscale opacity-50 mb-1">
+        <div *ngIf="isTyping()" class="flex justify-start items-end gap-2 animate-fadeIn">
+           <img [src]="cfg.realtor.avatarUrl" alt="" class="w-6 h-6 rounded-full object-cover grayscale opacity-50 mb-1">
            <div class="bg-slate-100 px-4 py-2 rounded-full text-xs flex gap-1 items-center">
              <span class="w-1 h-1 bg-slate-400 rounded-full animate-bounce"></span>
              <span class="w-1 h-1 bg-slate-400 rounded-full animate-bounce delay-100"></span>
@@ -101,9 +104,11 @@ import { ChatMessage } from '../../core/models/models';
         <form (ngSubmit)="sendMessage()" class="flex gap-2 items-center">
           <input [(ngModel)]="newMessage" name="message" 
                  autocomplete="off"
-                 placeholder="Message Kritika..." 
+                 maxlength="1000"
+                 [attr.aria-label]="'Message ' + cfg.realtor.firstName"
+                 [placeholder]="'Message ' + cfg.realtor.firstName + '...'" 
                  class="flex-1 px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm transition-all placeholder:text-slate-400">
-          <button type="submit" [disabled]="!newMessage.trim() || isTyping" 
+          <button type="submit" [disabled]="!newMessage.trim() || isTyping()" aria-label="Send message" 
                   class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg transform active:scale-95">
             <app-icon name="send" class="w-5 h-5 ml-0.5"></app-icon>
           </button>
@@ -136,57 +141,78 @@ import { ChatMessage } from '../../core/models/models';
     }
   `]
 })
-export class ChatbotComponent implements AfterViewChecked {
-  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  private geminiService = inject(GeminiService);
+export class ChatbotComponent {
+  protected cfg = inject(ConfigService).config();
 
-  isOpen = false;
-  hasUnread = true; 
+  private scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
+  private geminiService = inject(GeminiService);
+  private injector = inject(Injector);
+
+  isOpen = signal(false);
+  hasUnread = signal(true);
   newMessage = '';
-  isTyping = false;
-  
-  messages: ChatMessage[] = [
-    { text: "Hi! 👋 I'm Kritika. Whether you're buying or selling in Georgia, I'm here to help. What's on your mind?", isUser: false, time: new Date() }
-  ];
+  isTyping = signal(false);
+
+  private readonly storageKey = 'rfd-chat';
+  messages = signal<ChatMessage[]>(this.restoreMessages());
+
+  constructor() {
+    // Keep the newest message in view when one arrives or the window opens -
+    // but not on every change detection, so visitors can scroll back to read.
+    effect(() => {
+      this.messages();
+      this.isTyping();
+      if (!this.isOpen()) return;
+      afterNextRender(() => this.scrollToBottom(), { injector: this.injector });
+    });
+  }
 
   toggleChat() {
-    this.isOpen = !this.isOpen;
-    if (this.isOpen) {
-      this.hasUnread = false;
-      this.scrollToBottom();
-    }
+    this.isOpen.update(open => !open);
+    if (this.isOpen()) this.hasUnread.set(false);
   }
 
   async sendMessage() {
-    if (!this.newMessage.trim()) return;
+    if (!this.newMessage.trim() || this.isTyping()) return;
 
     const userText = this.newMessage;
-    this.messages.push({ text: userText, isUser: true, time: new Date() });
+    const history = this.messages();
+    this.addMessage({ text: userText, isUser: true, time: new Date() });
     this.newMessage = '';
-    this.scrollToBottom();
-    
-    this.isTyping = true;
+    this.isTyping.set(true);
 
     try {
-      const responseText = await this.geminiService.sendMessage(userText);
-      this.messages.push({ text: responseText, isUser: false, time: new Date() });
+      const responseText = await this.geminiService.sendMessage(userText, history);
+      this.addMessage({ text: responseText, isUser: false, time: new Date() });
     } catch (error) {
-      this.messages.push({ text: "I'm having a little trouble connecting. Please try again.", isUser: false, time: new Date() });
+      this.addMessage({ text: "I'm having a little trouble connecting. Please try again.", isUser: false, time: new Date() });
     } finally {
-      this.isTyping = false;
-      this.scrollToBottom();
+      this.isTyping.set(false);
     }
   }
 
-  ngAfterViewChecked() {
-    this.scrollToBottom();
+  private addMessage(msg: ChatMessage) {
+    this.messages.update(list => [...list, msg]);
+    try {
+      sessionStorage.setItem(this.storageKey, JSON.stringify(this.messages()));
+    } catch { /* storage unavailable (private mode) - chat still works */ }
   }
 
-  scrollToBottom(): void {
-    if (this.scrollContainer) {
-      try {
-        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-      } catch(err) { }
-    }
+  // Keeps the conversation across page reloads within the same browser tab.
+  private restoreMessages(): ChatMessage[] {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(this.storageKey) || '[]');
+      if (Array.isArray(saved) && saved.length) {
+        return saved.map((m: ChatMessage) => ({ ...m, time: new Date(m.time) }));
+      }
+    } catch { /* ignore corrupt or unavailable storage */ }
+    return [
+      { text: `Hi! 👋 I'm ${this.cfg.realtor.firstName}. Whether you're buying or selling in Georgia, I'm here to help. What's on your mind?`, isUser: false, time: new Date() }
+    ];
+  }
+
+  private scrollToBottom(): void {
+    const el = this.scrollContainer()?.nativeElement;
+    if (el) el.scrollTop = el.scrollHeight;
   }
 }

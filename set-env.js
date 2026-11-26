@@ -15,6 +15,7 @@ const envConfigFile = `
 export const environment = {
   production: true,
   geminiApiKey: ${JSON.stringify(process.env.GEMINI_API_KEY || "")},
+  googleMapsApiKey: ${JSON.stringify(process.env.GOOGLE_MAPS_API_KEY || "")},
   googleScriptUrl: ${JSON.stringify(process.env.GOOGLE_SCRIPT_URL || "")},
   firebaseConfig: {
     apiKey: ${JSON.stringify(process.env.FIREBASE_API_KEY || "")},

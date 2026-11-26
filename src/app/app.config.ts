@@ -1,32 +1,31 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter, withComponentInputBinding,withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-// IMPORT THESE:
-import { getFirestore, provideFirestore, enableIndexedDbPersistence } from '@angular/fire/firestore'; 
-import { getStorage, provideStorage } from '@angular/fire/storage';
+import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import {
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  provideFirestore
+} from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes,
+    provideRouter(
+      routes,
       withComponentInputBinding(),
-    withInMemoryScrolling({
+      withInMemoryScrolling({
         scrollPositionRestoration: 'top', // Scroll to top on navigation
-        anchorScrolling: 'enabled'        // Allow anchor scrolling
+        anchorScrolling: 'enabled'        // Scroll to #fragment (used by SectionNavService)
       })
-  ),
-    
+    ),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    
-    // UPDATE THIS PROVIDER:
-    provideFirestore(() => {
-        const firestore = getFirestore();
-        // Enable offline persistence (caches data for speed)
-        enableIndexedDbPersistence(firestore);
-        return firestore;
-    }),
-    
-    provideStorage(() => getStorage())
+    // Offline cache (IndexedDB), shared across open tabs
+    provideFirestore(() =>
+      initializeFirestore(getApp(), {
+        localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+      })
+    )
   ]
 };

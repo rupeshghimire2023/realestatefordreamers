@@ -1,0 +1,63 @@
+rules_version = '2';
+
+// Deploy with: firebase deploy --only firestore:rules
+// The Firebase console and Admin SDK bypass these rules, so content can still be
+// managed there. "admin" is a custom auth claim for a future in-app admin panel.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    function isText(value, maxLen) {
+      return value is string && value.size() <= maxLen;
+    }
+
+    // Public site content: anyone can read, only admins can change.
+    match /listings/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /testimonials/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /blog_posts/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Leads: visitors may only create a well-formed lead. Nobody can list or
+    // read leads from the browser except admins.
+    match /leads/{id} {
+      allow read, update, delete: if isAdmin();
+      allow create: if request.resource.data.keys().hasOnly(
+                         ['firstName', 'lastName', 'email', 'phone', 'interest', 'message', 'timestamp', 'status'])
+                    && isText(request.resource.data.firstName, 100)
+                    && isText(request.resource.data.lastName, 100)
+                    && isText(request.resource.data.email, 200)
+                    && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+                    && isText(request.resource.data.phone, 40)
+                    && (request.resource.data.interest == null || isText(request.resource.data.interest, 40))
+                    && isText(request.resource.data.message, 5000)
+                    && request.resource.data.status == 'new'
+                    && request.resource.data.timestamp == request.time;
+    }
+
+    // Page-view logs: create-only, small fixed shape.
+    match /analytics_logs/{id} {
+      allow read, delete: if isAdmin();
+      allow create: if request.resource.data.keys().hasOnly(['page', 'timestamp', 'device', 'userAgent'])
+                    && isText(request.resource.data.page, 500)
+                    && isText(request.resource.data.timestamp, 40)
+                    && request.resource.data.device in ['Mobile', 'Desktop']
+                    && isText(request.resource.data.userAgent, 500);
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

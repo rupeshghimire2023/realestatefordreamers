@@ -1,15 +1,20 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, Injector, afterNextRender, effect, inject, signal, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { LeadService } from '../../../../core/services/lead.service';
+import { ConfigService } from '../../../../core/services/config.service';
+import { ContactIntentService } from '../../../../core/services/contact-intent.service';
+import { SectionNavService } from '../../../../core/services/section-nav.service';
+import { LeadInterest } from '../../../../core/models/models';
+import { LEAD_LIMITS } from '../../../../core/utils/lead';
+import { phoneValidator } from '../../../../shared/validators/phone.validator';
 
 @Component({
   selector: 'app-home-contact',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule, IconComponent],
   template: `
-    <section id="contact" class="py-24 bg-white relative overflow-hidden">
+    <section class="py-24 bg-white relative overflow-hidden">
       <!-- Decorative Background -->
       <div class="absolute right-0 top-0 w-1/3 h-full bg-slate-50 skew-x-12 transform origin-top hidden lg:block z-0"></div>
       
@@ -32,11 +37,11 @@ import { LeadService } from '../../../../core/services/lead.service';
               
               <!-- Personal Info Card -->
               <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-                <img src="https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fkritika_profile.JPG?alt=media&token=fbb83206-b27a-4eb2-9262-cd3f3c0af8c7" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 shadow-md">
+                <img [src]="cfg.realtor.avatarUrl" alt="" loading="lazy" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 shadow-md">
                 <div>
-                  <h3 class="text-xl font-serif font-bold text-slate-900">Kritika Katwal</h3>
-                  <p class="text-amber-600 font-medium text-sm uppercase tracking-wide mb-2">Realtor® | Main Street Realty Group</p>
-                  <p class="text-slate-500 text-sm">Top Producer 2022, 2023, 2024</p>
+                  <h3 class="text-xl font-serif font-bold text-slate-900">{{ cfg.realtor.fullName }}</h3>
+                  <p class="text-amber-600 font-medium text-sm uppercase tracking-wide mb-2">Realtor® | {{ cfg.realtor.brokerage }}</p>
+                  <p class="text-slate-500 text-sm">Top Producer {{ cfg.realtor.topProducerYears.join(', ') }}</p>
                 </div>
               </div>
 
@@ -48,7 +53,7 @@ import { LeadService } from '../../../../core/services/lead.service';
                   </div>
                   <div>
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-bold">Call / Text</p>
-                    <a href="tel:+14706526362" class="text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors">(470) 652-6362</a>
+                    <a [href]="'tel:' + cfg.realtor.phone" class="text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors">{{ cfg.realtor.phoneDisplay }}</a>
                   </div>
                 </div>
 
@@ -58,7 +63,7 @@ import { LeadService } from '../../../../core/services/lead.service';
                   </div>
                   <div>
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-bold">Email</p>
-                    <a href="mailto:realestatefordreamers@gmail.com" class="text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors">realestatefordreamers@gmail.com</a>
+                    <a [href]="'mailto:' + cfg.realtor.email" class="text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors">{{ cfg.realtor.email }}</a>
                   </div>
                 </div>
 
@@ -66,13 +71,20 @@ import { LeadService } from '../../../../core/services/lead.service';
                 <div class="pt-6 border-t border-slate-100">
                   <p class="text-xs text-slate-400 uppercase tracking-wider font-bold mb-4">Follow My Journey</p>
                   <div class="flex gap-4">
-                    <a href="https://www.instagram.com/realestatefordreamers/" target="_blank" class="w-10 h-10 rounded bg-slate-200 flex items-center justify-center text-slate-600 hover:bg-amber-500 hover:text-white transition-all transform hover:-translate-y-1">
+                    <a *ngIf="cfg.socials.instagram" [href]="cfg.socials.instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
+                       class="w-10 h-10 rounded bg-slate-200 flex items-center justify-center text-slate-600 hover:bg-amber-500 hover:text-white transition-all transform hover:-translate-y-1">
                       <app-icon name="instagram" class="w-5 h-5"></app-icon>
                     </a>
-                    <a href="https://www.facebook.com/p/Real-Estate-for-Dreamers-100079074604797" target="_blank"  class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
+                    <a *ngIf="cfg.socials.facebook" [href]="cfg.socials.facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                       class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
                       <app-icon name="facebook" class="w-5 h-5"></app-icon>
                     </a>
-                    <a href="https://www.tiktok.com" target="_blank"  class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-black hover:text-white transition-all transform hover:-translate-y-1">
+                    <a *ngIf="cfg.socials.linkedin" [href]="cfg.socials.linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+                       class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-sky-700 hover:text-white transition-all transform hover:-translate-y-1">
+                      <app-icon name="linkedin" class="w-5 h-5"></app-icon>
+                    </a>
+                    <a *ngIf="cfg.socials.tiktok" [href]="cfg.socials.tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok"
+                       class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-black hover:text-white transition-all transform hover:-translate-y-1">
                       <app-icon name="tiktok" class="w-5 h-5"></app-icon>
                     </a>
                   </div>
@@ -91,34 +103,40 @@ import { LeadService } from '../../../../core/services/lead.service';
               
               <div class="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">First Name</label>
-                  <input type="text" formControlName="firstName" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="First Name">
+                  <label for="contact-first-name" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">First Name</label>
+                  <input id="contact-first-name" type="text" formControlName="firstName" autocomplete="given-name" [maxlength]="limits.name" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="First Name">
                 </div>
                 <div>
-                  <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Name</label>
-                  <input type="text" formControlName="lastName" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="Last Name">
+                  <label for="contact-last-name" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Name</label>
+                  <input id="contact-last-name" type="text" formControlName="lastName" autocomplete="family-name" [maxlength]="limits.name" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="Last Name">
                 </div>
               </div>
 
               <div class="mb-6">
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Phone Number</label>
-                <input type="tel" formControlName="phone" 
-                       [class.border-red-500]="contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched"
+                <label for="contact-phone" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Phone Number</label>
+                <input id="contact-phone" type="tel" formControlName="phone" autocomplete="tel" [maxlength]="limits.phone"
+                       [class.border-red-500]="showError('phone')"
+                       [attr.aria-invalid]="showError('phone')"
+                       aria-describedby="contact-phone-error"
                        class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="(555) 123-4567">
-                <div *ngIf="contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched" class="text-red-500 text-xs mt-1">
+                <div id="contact-phone-error" *ngIf="showError('phone')" class="text-red-500 text-xs mt-1">
                   Please enter a valid phone number (10+ digits)
                 </div>
               </div>
 
               <div class="mb-6">
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email Address</label>
-                <input type="email" formControlName="email" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="jane@example.com">
+                <label for="contact-email" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email Address</label>
+                <input id="contact-email" type="email" formControlName="email" autocomplete="email" [maxlength]="limits.email"
+                       [class.border-red-500]="showError('email')"
+                       [attr.aria-invalid]="showError('email')"
+                       class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="jane@example.com">
+                <div *ngIf="showError('email')" class="text-red-500 text-xs mt-1">Please enter a valid email address</div>
               </div>
 
               <div class="mb-6">
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">I'm interested in...</label>
+                <label for="contact-interest" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">I'm interested in...</label>
                 <div class="relative">
-                  <select formControlName="interest" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all appearance-none cursor-pointer text-slate-700">
+                  <select id="contact-interest" formControlName="interest" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all appearance-none cursor-pointer text-slate-700">
                     <option value="buying">Buying a Home</option>
                     <option value="selling">Selling a Home</option>
                     <option value="other">General Inquiry</option>
@@ -130,21 +148,22 @@ import { LeadService } from '../../../../core/services/lead.service';
               </div>
 
               <div class="mb-8">
-                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Message</label>
-                <textarea formControlName="message" rows="4" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="How can I help you?"></textarea>
+                <label for="contact-message" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Message</label>
+                <textarea id="contact-message" formControlName="message" rows="4" [maxlength]="limits.message" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="How can I help you?"></textarea>
               </div>
 
               <button type="submit" 
-                      [disabled]="contactForm.invalid || isSubmitting"
+                      [disabled]="contactForm.invalid || isSubmitting()"
                       class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-amber-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2 group">
-                <span *ngIf="isSubmitting" class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
-                <span *ngIf="!isSubmitting">Send Message</span>
-                <app-icon *ngIf="!isSubmitting" name="send" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></app-icon>
+                <span *ngIf="isSubmitting()" class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
+                <span *ngIf="!isSubmitting()">Send Message</span>
+                <app-icon *ngIf="!isSubmitting()" name="send" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></app-icon>
               </button>
               
-              <p *ngIf="submitSuccess" class="mt-4 text-green-600 text-center font-medium bg-green-50 py-3 rounded-lg border border-green-100 flex items-center justify-center gap-2 animate-fadeInUp">
+              <p *ngIf="submitSuccess()" role="status" class="mt-4 text-green-600 text-center font-medium bg-green-50 py-3 rounded-lg border border-green-100 flex items-center justify-center gap-2 animate-fadeInUp">
                 <app-icon name="check" class="w-5 h-5"></app-icon> Message sent successfully!
               </p>
+              <p *ngIf="submitError()" role="alert" class="mt-3 text-red-600 text-center font-medium text-sm bg-red-50 py-2 rounded-lg">{{ submitError() }}</p>
             </form>
           </div>
 
@@ -154,46 +173,66 @@ import { LeadService } from '../../../../core/services/lead.service';
   `
 })
 export class ContactComponent {
-  private fb = inject(FormBuilder);
+  protected cfg = inject(ConfigService).config();
+  protected readonly limits = LEAD_LIMITS;
+
+  private fb = inject(FormBuilder).nonNullable;
   private leadService = inject(LeadService);
-  
-  isSubmitting = false;
-  submitSuccess = false;
-  contactForm: FormGroup;
+  private contactIntents = inject(ContactIntentService);
+  private sectionNav = inject(SectionNavService);
+  private injector = inject(Injector);
+
+  isSubmitting = signal(false);
+  submitSuccess = signal(false);
+  submitError = signal('');
+
+  // nonNullable: reset() goes back to these values (so "interest" never becomes null).
+  readonly contactForm = this.fb.group({
+    firstName: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.name)]],
+    lastName: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.name)]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(LEAD_LIMITS.email)]],
+    phone: ['', [Validators.required, phoneValidator]],
+    interest: ['buying' as LeadInterest],
+    message: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.message)]]
+  });
 
   constructor() {
-    this.contactForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern('^[- +()0-9]+$'), Validators.minLength(10)]], // Added Pattern and Length Validation
-      interest: ['buying'],
-      message: ['', Validators.required]
+    // Apply "contact me about X" requests from the hero, services cards or a listing page.
+    // This section is deferred, so a request may arrive before it exists; the effect
+    // picks it up as soon as the form is created, then brings the form into view
+    // (sections above may have loaded and pushed it down meanwhile).
+    effect(() => {
+      const intent = this.contactIntents.pending();
+      if (!intent) return;
+      untracked(() => {
+        this.contactForm.patchValue({ interest: intent.interest });
+        if (intent.message) this.contactForm.patchValue({ message: intent.message });
+        this.contactIntents.clear();
+        afterNextRender(() => this.sectionNav.scrollTo('contact'), { injector: this.injector });
+      });
     });
   }
 
-  setInterest(interest: string, message?: string) {
-    this.contactForm.patchValue({ interest });
-    if (message) {
-      this.contactForm.patchValue({ message });
-    }
+  showError(field: 'phone' | 'email'): boolean {
+    const control = this.contactForm.controls[field];
+    return control.invalid && control.touched;
   }
 
   onSubmit() {
-    if (this.contactForm.valid) {
-      this.isSubmitting = true;
-      const formData = this.contactForm.value;
-      this.leadService.submitLead(formData)
-        .then(() => {
-          this.isSubmitting = false;
-          this.submitSuccess = true;
-          this.contactForm.reset();
-          setTimeout(() => this.submitSuccess = false, 5000);
-        })
-        .catch(err => {
-          console.error('Error submitting form', err);
-          this.isSubmitting = false;
-        });
-    }
+    if (this.contactForm.invalid) return;
+    this.isSubmitting.set(true);
+    this.submitError.set('');
+    this.leadService.submitLead(this.contactForm.getRawValue())
+      .then(() => {
+        this.isSubmitting.set(false);
+        this.submitSuccess.set(true);
+        this.contactForm.reset();
+        setTimeout(() => this.submitSuccess.set(false), 5000);
+      })
+      .catch(err => {
+        console.error('Error submitting form', err);
+        this.isSubmitting.set(false);
+        this.submitError.set("We couldn't send your request. Please try again, or call or email us directly.");
+      });
   }
 }

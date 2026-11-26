@@ -32,63 +32,64 @@ Sold: Success stories with "Price Over Asking" metrics and a "Get Home Value" ca
 
 🛠️ Tech Stack
 
-Frontend: Angular 17+ (Standalone Components, Signals)
+Frontend: Angular 21 (Standalone Components, Signals, zoneless)
 
 Styling: Tailwind CSS
 
-Database: Firebase Firestore & Storage
+Database: Firebase Firestore & Storage (security rules in firestore.rules / storage.rules)
 
-AI: Google Gemini API (1.5 Flash)
+AI: Google Gemini API (2.5 Flash-Lite) via a Netlify Function (netlify/functions/chat.js)
 
-Integrations: Google Apps Script (Form Handling & Agentic Workflows)
+Integrations: Google Apps Script (Form Handling & Agentic Workflows), Google Maps Places (address autocomplete)
 
 🚀 Getting Started
 
 Prerequisites
 
-Node.js v18 or higher
-
-Angular CLI (npm install -g @angular/cli)
+Node.js v20 or higher
 
 Installation
 
-Clone the repository:
-
-git clone [https://github.com/your-username/real-estate-dreamers.git](https://github.com/your-username/real-estate-dreamers.git)
+git clone https://github.com/your-username/real-estate-dreamers.git
 cd real-estate-dreamers
-
-
-Install dependencies:
-
 npm install
 
 
 Configure Environment Variables:
-Create a file src/environments/environment.ts (this file is git-ignored for security). Add your API keys:
-
-export const environment = {
-  production: false,
-  geminiApiKey: 'YOUR_GEMINI_API_KEY',
-  googleScriptUrl: 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL',
-  firebaseConfig: {
-    apiKey: "...",
-    authDomain: "...",
-    projectId: "...",
-    storageBucket: "...",
-    messagingSenderId: "...",
-    appId: "..."
-  }
-};
-
+Copy src/environments/environment.example.ts to src/environments/environment.ts (git-ignored) and fill in your values.
 
 Run the development server:
 
-ng serve
+npx ng serve
 
+Navigate to http://localhost:4200/. The chatbot calls /.netlify/functions/chat, so use `netlify dev` if you want to test it locally.
 
-Navigate to http://localhost:4200/. The application will automatically reload if you change any of the source files.
+Realtor details (name, photos, phone, email, socials, Top Producer years, hero text and About bio) live in one place: src/app/core/config/realtor-data.ts. Leave a social network out to hide its icon. The chatbot persona in netlify/functions/chat.js repeats the contact details, so keep the two in sync.
 
+Blog posts (Firestore `blog_posts`) are written in Markdown; plain text with line breaks works too.
 
+☁️ Deployment (Netlify)
+
+Netlify runs `npm run build:netlify` (set in netlify.toml), which runs set-env.js to generate environment.ts from these Netlify environment variables, then builds. Locally, `npm run build` just builds with your own environment.ts (don't run `build:netlify` locally: it overwrites that file).
+
+GEMINI_API_KEY (used only by the chat function, never sent to the browser)
+GOOGLE_MAPS_API_KEY (restrict it to your domains under HTTP referrers in Google Cloud)
+GOOGLE_SCRIPT_URL
+FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_PROJECT_ID, FIREBASE_STORAGE_BUCKET, FIREBASE_SENDER_ID, FIREBASE_APP_ID
+
+🔒 Firebase Security Rules
+
+Deploy the rules with the Firebase CLI:
+
+npm install -g firebase-tools
+firebase login
+firebase deploy --only firestore:rules,storage
+
+Visitors can read listings, testimonials and blog posts, and can only create leads and page-view logs. Leads cannot be read from the browser. Manage content in the Firebase console, which bypasses the rules.
+
+🧪 Tests
+
+npx ng test
 
 
 👤 Author

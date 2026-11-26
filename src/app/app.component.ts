@@ -1,64 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { filter } from 'rxjs/operators';
 import { HeaderComponent } from './core/layout/header/header.component';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { ChatbotComponent } from './features/chatbot/chatbot.component';
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [RouterOutlet, HeaderComponent, FooterComponent, ChatbotComponent],
   template: `
-    <!-- Global Header -->
     <app-header></app-header>
-
-    <!-- Page Content (Home, etc.) -->
     <router-outlet></router-outlet>
-    
-    <!-- Global Footer -->
     <app-footer></app-footer>
-
-    <!-- Global Chatbot -->
     <app-chatbot></app-chatbot>
   `
 })
-export class AppComponent implements OnInit {
-  
-  // 1. Inject Router and Firestore in the constructor
-  constructor(private router: Router, private firestore: Firestore) {}
+export class AppComponent {
+  private firestore = inject(Firestore);
 
-  // 2. Set up the listener when the component starts
-  ngOnInit() {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      // Logic to run when navigation finishes
-      this.logPageView(event.urlAfterRedirects);
-    });
+  constructor() {
+    // Log a page view after every navigation (see analytics_logs in firestore.rules).
+    inject(Router).events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      takeUntilDestroyed()
+    ).subscribe(event => this.logPageView(event.urlAfterRedirects));
   }
 
-  // 3. Helper function to send data to Firebase
-  async logPageView(url: string) {
-    // Define the collection reference
-    const analyticsCollection = collection(this.firestore, 'analytics_logs');
-
+  private async logPageView(url: string) {
     try {
-      await addDoc(analyticsCollection, {
-        page: url,
-        timestamp: new Date().toISOString(), // Use ISO string for better compatibility
+      await addDoc(collection(this.firestore, 'analytics_logs'), {
+        page: url.slice(0, 500),
+        timestamp: new Date().toISOString(),
         device: this.isMobile() ? 'Mobile' : 'Desktop',
-        userAgent: navigator.userAgent // Optional: store exact browser info
+        userAgent: navigator.userAgent.slice(0, 500)
       });
-      console.log('Analytics logged for:', url);
     } catch (e) {
       console.error('Error logging analytics:', e);
     }
   }
 
-  // 4. Helper to detect mobile devices
-  isMobile(): boolean {
+  private isMobile(): boolean {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 }
