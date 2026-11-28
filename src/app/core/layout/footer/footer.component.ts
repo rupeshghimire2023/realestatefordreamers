@@ -16,10 +16,8 @@ import { SectionNavService } from '../../services/section-nav.service';
           
           <!-- Brand Column -->
           <div class="col-span-1 md:col-span-2">
-            <a routerLink="/" class="text-2xl font-serif font-bold tracking-tight flex items-center gap-2 mb-6 group w-fit">
-              <div class="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
-                <span class="text-xl">{{ cfg.branding.logoInitial }}</span>
-              </div>
+            <a routerLink="/" class="text-2xl font-serif font-bold tracking-tight flex items-center gap-3 mb-6 group w-fit">
+              <img [src]="cfg.branding.logoMark" alt="" class="h-10 w-auto shrink-0 group-hover:scale-105 transition-transform">
               <span class="text-white">
                 Real Estate <span class="text-amber-500">for Dreamers</span>
               </span>

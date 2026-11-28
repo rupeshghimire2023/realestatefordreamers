@@ -72,7 +72,7 @@ const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1560518883-ce09059eeff
                 <div class="mt-auto flex items-center justify-between border-t border-slate-50 pt-4">
                   <div class="flex items-center gap-3">
                      <div class="w-8 h-8 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
-                       <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" class="w-full h-full object-cover">
+                       <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-full h-full object-cover">
                      </div>
                      <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">{{ cfg.realtor.fullName }}</span>
                   </div>

@@ -21,10 +21,8 @@ interface NavItem {
       <div class="container mx-auto px-6 flex justify-between items-center">
         
         <!-- Logo -->
-        <a routerLink="/" (click)="onLogoClick()" class="text-2xl md:text-3xl font-serif font-bold tracking-tight flex items-center gap-2 group cursor-pointer">
-          <div class="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
-           <img [src]="cfg.branding.myLogo" [alt]="cfg.branding.websiteName" />
-          </div>
+        <a routerLink="/" (click)="onLogoClick()" class="text-2xl md:text-3xl font-serif font-bold tracking-tight flex items-center gap-3 group cursor-pointer">
+          <img [src]="cfg.branding.logoMark" alt="" class="h-10 md:h-12 w-auto shrink-0 group-hover:scale-105 transition-transform">
           <span [ngClass]="{'text-slate-800': isScrolled(), 'text-white': !isScrolled(), 'text-slate-900': isMobileMenuOpen()}">
             Real Estate <span class="text-amber-500">for Dreamers</span>
           </span>

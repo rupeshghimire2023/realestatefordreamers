@@ -38,7 +38,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
               
               <!-- Personal Info Card -->
               <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-                <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" loading="lazy" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 shadow-md">
+                <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" loading="lazy" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 shadow-md">
                 <div>
                   <h3 class="text-xl font-serif font-bold text-slate-900">{{ cfg.realtor.fullName }}</h3>
                   <p class="text-amber-600 font-medium text-sm uppercase tracking-wide mb-2">Realtor® | {{ cfg.realtor.brokerage }}</p>

@@ -21,7 +21,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
             <div class="absolute -top-4 -left-4 w-24 h-24 bg-amber-100 rounded-full opacity-50 z-0"></div>
             <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-slate-100 rounded-full opacity-50 z-0"></div>
             
-            <img [src]="cfg.realtor.headshotUrl" appFallback="/assets/logo.png" fallbackFit="contain" [alt]="'Portrait of ' + cfg.realtor.fullName"
+            <img [src]="cfg.realtor.headshotUrl" [appFallback]="cfg.branding.fullLogo" fallbackFit="contain" [alt]="'Portrait of ' + cfg.realtor.fullName"
                  class="relative z-10 rounded-2xl shadow-2xl w-full object-cover h-[600px]" loading="lazy" fetchpriority="low">
             
             <!-- Experience Badge -->
@@ -74,7 +74,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
 
             <!-- Profile Signature -->
             <div class="flex items-center gap-4 pt-6 border-t border-slate-100">
-               <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" class="w-14 h-14 rounded-full border-2 border-white shadow-md object-cover" alt="" loading="lazy">
+               <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" class="w-14 h-14 rounded-full border-2 border-white shadow-md object-cover" alt="" loading="lazy">
                <div>
                   <p class="font-serif font-bold text-slate-900 text-lg">{{ cfg.realtor.fullName }}</p>
                   <p class="text-xs text-amber-600 uppercase tracking-wide font-bold">{{ cfg.realtor.title }}</p>

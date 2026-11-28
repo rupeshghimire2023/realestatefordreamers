@@ -19,7 +19,7 @@ import { ImgFallbackDirective } from '../../shared/directives/img-fallback.direc
             class="fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50 group border-4 border-white overflow-hidden bg-slate-900">
       
       <!-- Show Face when closed -->
-      <img *ngIf="!isOpen()" [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" class="w-full h-full object-cover" alt="">
+      <img *ngIf="!isOpen()" [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" class="w-full h-full object-cover" alt="">
       
       <!-- Show X when open -->
       <div *ngIf="isOpen()" class="w-full h-full flex items-center justify-center bg-slate-900 text-white">
@@ -41,7 +41,7 @@ import { ImgFallbackDirective } from '../../shared/directives/img-fallback.direc
         
         <!-- Avatar -->
         <div class="relative shrink-0">
-          <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-lg">
+          <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-lg">
         </div>
         
         <!-- Info -->
@@ -64,7 +64,7 @@ import { ImgFallbackDirective } from '../../shared/directives/img-fallback.direc
              [ngClass]="{'flex justify-end': msg.isUser, 'flex justify-start items-end gap-2': !msg.isUser}">
           
           <!-- Bot Avatar (Only show for bot messages) -->
-          <img *ngIf="!msg.isUser" [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" class="w-8 h-8 rounded-full object-cover border border-slate-200 mb-1 shadow-sm">
+          <img *ngIf="!msg.isUser" [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-8 h-8 rounded-full object-cover border border-slate-200 mb-1 shadow-sm">
 
           <!-- Message Bubble -->
           <div [ngClass]="{
@@ -88,7 +88,7 @@ import { ImgFallbackDirective } from '../../shared/directives/img-fallback.direc
 
         <!-- Typing Indicator -->
         <div *ngIf="isTyping()" class="flex justify-start items-end gap-2 animate-fadeIn">
-           <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" class="w-6 h-6 rounded-full object-cover grayscale opacity-50 mb-1">
+           <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-6 h-6 rounded-full object-cover grayscale opacity-50 mb-1">
            <div class="bg-slate-100 px-4 py-2 rounded-full text-xs flex gap-1 items-center">
              <span class="w-1 h-1 bg-slate-400 rounded-full animate-bounce"></span>
              <span class="w-1 h-1 bg-slate-400 rounded-full animate-bounce delay-100"></span>

@@ -20,8 +20,8 @@ export const REALTOR_DATA: SiteConfig = {
 
   branding: {
     websiteName: 'Real Estate for Dreamers',
-    logoInitial: 'K',
-    myLogo: 'https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Flogo.png?alt=media&token=068a9e22-31a3-4d4a-8fe2-c84c8929de4f',
+    logoMark: '/assets/brand/logo-mark.svg',
+    fullLogo: '/assets/logo.png',
     heroImage: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=2070',
     heroVideo: 'https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fbackground_video.mp4?alt=media&token=70d6dc58-2bb4-4e3e-b168-fddebaa8f6bd'
   },

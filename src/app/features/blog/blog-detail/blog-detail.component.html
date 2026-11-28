@@ -20,7 +20,7 @@
         </span>
         <span class="flex items-center gap-2">
           <div class="w-6 h-6 rounded-full bg-slate-700 overflow-hidden border border-slate-600">
-            <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" class="w-full h-full object-cover">
+            <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-full h-full object-cover">
           </div>
           {{ post.author || cfg.realtor.fullName }}
         </span>
@@ -50,7 +50,7 @@
         <!-- Author / Share Footer -->
         <div class="mt-16 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
           <div class="flex items-center gap-4">
-             <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" class="w-16 h-16 rounded-full border-2 border-slate-100 shadow-md object-cover">
+             <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-16 h-16 rounded-full border-2 border-slate-100 shadow-md object-cover">
              <div>
                <p class="font-serif font-bold text-slate-900 text-lg">Written by {{ cfg.realtor.fullName }}</p>
                <p class="text-slate-500 text-sm">Top Producer & Real Estate Expert</p>

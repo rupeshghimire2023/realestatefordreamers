@@ -68,6 +68,8 @@ Realtor details (name, photos, phone, email, socials, Top Producer years, hero t
 
 Blog posts (Firestore `blog_posts`) are written in Markdown; plain text with line breaks works too.
 
+🎨 Brand: the icon-only logo (src/assets/brand/logo-mark.svg, traced from the badge) is used in the header, footer, favicon and small avatars; the full badge (src/assets/logo.png) is for large uses. Both paths are in realtor-data.ts (branding).
+
 🖼️ Images are hosted in Firebase Storage (upload in the Firebase console and copy the download URL) or linked from the MLS. If a photo link breaks, listings and blog posts show a neutral placeholder and the realtor's photos fall back to the logo, instead of a broken-image icon.
 
 ☁️ Deployment (Netlify)
