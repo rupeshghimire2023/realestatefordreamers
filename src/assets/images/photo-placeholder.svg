@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Photo not available">
+  <rect width="800" height="600" fill="#f1f5f9"/>
+  <g fill="none" stroke="#cbd5e1" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" transform="translate(400 300)">
+    <path d="M-110 10 L0 -90 L110 10"/>
+    <path d="M-80 -15 V90 H80 V-15"/>
+    <path d="M-25 90 V35 H25 V90"/>
+  </g>
+</svg>

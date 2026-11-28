@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Property } from '../../../../core/models/models';
+import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback.directive';
 
 @Component({
   selector: 'app-home-featured-portfolio',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ImgFallbackDirective],
   template: `
     <section id="portfolio" class="py-20 bg-slate-50 border-t border-slate-100" *ngIf="listings.length > 0">
       <div class="container mx-auto px-6">
@@ -21,7 +22,7 @@ import { Property } from '../../../../core/models/models';
              class="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 flex flex-col">
             
             <div class="relative h-64 overflow-hidden">
-              <img [src]="property.imageUrl" [alt]="property.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+              <img [src]="property.imageUrl" appFallback="/assets/images/photo-placeholder.svg" [alt]="property.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
               <div class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase shadow-sm"
                  [ngClass]="{
                    'bg-green-500 text-white': property.status === 'active',

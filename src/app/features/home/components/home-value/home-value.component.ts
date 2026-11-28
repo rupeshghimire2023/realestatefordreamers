@@ -1,16 +1,10 @@
-import { Component, ElementRef, ChangeDetectorRef, afterNextRender, inject, signal, viewChild } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
 import { LeadService } from '../../../../core/services/lead.service';
-import { MapsLoaderService } from '../../../../core/services/maps-loader.service';
 import { LEAD_LIMITS, describeHome } from '../../../../core/utils/lead';
 import { phoneValidator } from '../../../../shared/validators/phone.validator';
-
-// Declare google variable to avoid TypeScript errors
-declare var google: any;
-
-const GEORGIA_BOUNDS = { south: 30.355757, west: -85.605165, north: 35.000659, east: -80.839729 };
 
 @Component({
   selector: 'app-home-value',
@@ -75,20 +69,16 @@ const GEORGIA_BOUNDS = { south: 30.355757, west: -85.605165, north: 35.000659, e
               <div class="space-y-4 mb-6">
                 <div>
                   <label for="valuation-address" class="block text-xs font-bold text-slate-500 uppercase mb-1">Property Address</label>
-                  
-                  <input #addressInput
-                         id="valuation-address"
+                  <input id="valuation-address"
                          formControlName="address" 
                          type="text" 
                          autocomplete="street-address"
                          [maxlength]="limits.address"
-                         placeholder="Enter your address..." 
-                         [attr.aria-invalid]="!!locationError()"
-                         aria-describedby="valuation-address-error"
+                         placeholder="Street, city, ZIP" 
+                         aria-describedby="valuation-address-hint"
                          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all placeholder:text-slate-400">
                   
-                  <!-- Validation Error for Georgia -->
-                  <p id="valuation-address-error" *ngIf="locationError()" class="text-red-500 text-xs mt-1">{{ locationError() }}</p>
+                  <p id="valuation-address-hint" class="text-slate-400 text-xs mt-1">Georgia properties only.</p>
                 </div>
                 
                 <div class="grid grid-cols-3 gap-3">
@@ -149,16 +139,11 @@ const GEORGIA_BOUNDS = { south: 30.355757, west: -85.605165, north: 35.000659, e
 export class HomeValueComponent {
   private fb = inject(FormBuilder).nonNullable;
   private leadService = inject(LeadService);
-  private mapsLoader = inject(MapsLoaderService);
-  private cdr = inject(ChangeDetectorRef);
   protected readonly limits = LEAD_LIMITS;
-
-  private addressInput = viewChild.required<ElementRef<HTMLInputElement>>('addressInput');
 
   isSubmitting = signal(false);
   submitSuccess = signal(false);
   submitError = signal('');
-  locationError = signal('');
 
   readonly valuationForm = this.fb.group({
     address: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.address)]],
@@ -172,52 +157,9 @@ export class HomeValueComponent {
     website: [''] // spam trap, see template
   });
 
-  constructor() {
-    // Address autocomplete is an enhancement; the form still works without it.
-    afterNextRender(() => {
-      this.mapsLoader.load()
-        .then(() => this.initAutocomplete())
-        .catch(err => console.warn('Address autocomplete unavailable:', err));
-    });
-  }
-
   phoneInvalid(): boolean {
     const phone = this.valuationForm.controls.phone;
     return phone.invalid && phone.touched;
-  }
-
-  private initAutocomplete() {
-    if (typeof google === 'undefined') return;
-
-    const autocomplete = new google.maps.places.Autocomplete(this.addressInput().nativeElement, {
-      componentRestrictions: { country: 'us' },
-      fields: ['formatted_address', 'address_components'],
-      types: ['address'],
-      bounds: GEORGIA_BOUNDS,
-      strictBounds: false
-    });
-
-    // This callback comes from Google's script, so Angular isn't notified on its own;
-    // markForCheck() refreshes the error message and the submit button.
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if (!place.address_components) return;
-
-      const inGeorgia = place.address_components.some((c: any) =>
-        c.short_name === 'GA' && c.types.includes('administrative_area_level_1')
-      );
-
-      if (inGeorgia) {
-        this.locationError.set('');
-        this.valuationForm.patchValue({
-          address: place.formatted_address || this.addressInput().nativeElement.value
-        });
-      } else {
-        this.locationError.set('Please select a valid address within Georgia.');
-        this.valuationForm.controls.address.setValue('');
-      }
-      this.cdr.markForCheck();
-    });
   }
 
   onSubmit() {

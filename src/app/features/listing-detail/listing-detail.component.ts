@@ -12,10 +12,11 @@ import { ConfigService } from '../../core/services/config.service';
 import { LeadInterest } from '../../core/models/models';
 import { LEAD_LIMITS, describeHome } from '../../core/utils/lead';
 import { phoneValidator } from '../../shared/validators/phone.validator';
+import { ImgFallbackDirective } from '../../shared/directives/img-fallback.directive';
 
 @Component({
   selector: 'app-listing-detail',
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, IconComponent],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, IconComponent, ImgFallbackDirective],
   templateUrl: './listing-detail.component.html'
 })
 export class ListingDetailComponent {

@@ -6,12 +6,13 @@ import { BlogService } from '../../../core/services/blog.service';
 import { IconComponent } from '../../../shared/components/icon/icon.component';
 import { ConfigService } from '../../../core/services/config.service';
 import { ExcerptPipe } from '../../../shared/pipes/excerpt.pipe';
+import { ImgFallbackDirective } from '../../../shared/directives/img-fallback.directive';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800';
 
 @Component({
   selector: 'app-blog-list',
-  imports: [CommonModule, RouterModule, IconComponent, ExcerptPipe],
+  imports: [CommonModule, RouterModule, IconComponent, ExcerptPipe, ImgFallbackDirective],
   template: `
     <div class="min-h-screen bg-slate-50">
       
@@ -44,7 +45,7 @@ const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1560518883-ce09059eeff
               <!-- Image -->
               <div class="relative h-60 overflow-hidden">
                 <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-slate-900/0 transition-colors z-10"></div>
-                <img [src]="post.imageUrl || fallbackImage" [alt]="post.title" loading="lazy"
+                <img [src]="post.imageUrl || fallbackImage" appFallback="/assets/images/photo-placeholder.svg" [alt]="post.title" loading="lazy"
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                 
                 <!-- Date Badge -->
@@ -71,7 +72,7 @@ const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1560518883-ce09059eeff
                 <div class="mt-auto flex items-center justify-between border-t border-slate-50 pt-4">
                   <div class="flex items-center gap-3">
                      <div class="w-8 h-8 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
-                       <img [src]="cfg.realtor.avatarUrl" alt="" class="w-full h-full object-cover">
+                       <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" class="w-full h-full object-cover">
                      </div>
                      <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">{{ cfg.realtor.fullName }}</span>
                   </div>
