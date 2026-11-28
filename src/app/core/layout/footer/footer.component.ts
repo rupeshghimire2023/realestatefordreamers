@@ -19,7 +19,7 @@ import { SectionNavService } from '../../services/section-nav.service';
             <a routerLink="/" class="text-2xl font-serif font-bold tracking-tight flex items-center gap-3 mb-6 group w-fit">
               <img [src]="cfg.branding.logoMark" alt="" class="h-10 w-auto shrink-0 group-hover:scale-105 transition-transform">
               <span class="text-white">
-                Real Estate <span class="text-amber-500">for Dreamers</span>
+                Real Estate <span class="text-brand-600">for Dreamers</span>
               </span>
             </a>
             <p class="max-w-sm text-slate-400 leading-relaxed mb-6">
@@ -35,11 +35,11 @@ import { SectionNavService } from '../../services/section-nav.service';
           <div>
             <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-wider">Explore</h4>
             <ul class="space-y-3 text-sm">
-              <li><button type="button" (click)="goToSection('home')" class="hover:text-amber-500 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> Home</button></li>
-              <li><button type="button" (click)="goToSection('about')" class="hover:text-amber-500 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> About {{ cfg.realtor.firstName }}</button></li>
-              <li><a routerLink="/portfolio" class="hover:text-amber-500 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> Exclusive Portfolio</a></li>
-              <li><button type="button" (click)="goToSection('buying')" class="hover:text-amber-500 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> Services</button></li>
-              <li><button type="button" (click)="goToSection('testimonials')" class="hover:text-amber-500 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> Client Stories</button></li>
+              <li><button type="button" (click)="goToSection('home')" class="hover:text-brand-600 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> Home</button></li>
+              <li><button type="button" (click)="goToSection('about')" class="hover:text-brand-600 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> About {{ cfg.realtor.firstName }}</button></li>
+              <li><a routerLink="/portfolio" class="hover:text-brand-600 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> Exclusive Portfolio</a></li>
+              <li><button type="button" (click)="goToSection('buying')" class="hover:text-brand-600 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> Services</button></li>
+              <li><button type="button" (click)="goToSection('testimonials')" class="hover:text-brand-600 transition-colors cursor-pointer flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span> Client Stories</button></li>
             </ul>
           </div>
 
@@ -48,22 +48,22 @@ import { SectionNavService } from '../../services/section-nav.service';
             <h4 class="text-white font-bold mb-6 text-sm uppercase tracking-wider">Connect</h4>
             <ul class="space-y-4 text-sm mb-8">
               <li class="flex items-start gap-3">
-                <app-icon name="phone" class="w-5 h-5 text-amber-500 shrink-0"></app-icon>
+                <app-icon name="phone" class="w-5 h-5 text-brand-600 shrink-0"></app-icon>
                 <a [href]="'tel:' + cfg.realtor.phone" class="hover:text-white transition-colors">{{ cfg.realtor.phoneDisplay }}</a>
               </li>
               <li class="flex items-start gap-3">
-                <app-icon name="mail" class="w-5 h-5 text-amber-500 shrink-0"></app-icon>
+                <app-icon name="mail" class="w-5 h-5 text-brand-600 shrink-0"></app-icon>
                 <a [href]="'mailto:' + cfg.realtor.email" class="hover:text-white transition-colors break-all">{{ cfg.realtor.email }}</a>
               </li>
               <li class="flex items-start gap-3">
-                <app-icon name="map-pin" class="w-5 h-5 text-amber-500 shrink-0"></app-icon>
+                <app-icon name="map-pin" class="w-5 h-5 text-brand-600 shrink-0"></app-icon>
                 <span>Serving All over Georgia</span>
               </li>
             </ul>
 
             <div class="flex gap-3">
               <a *ngIf="cfg.socials.instagram" [href]="cfg.socials.instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                 class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-amber-500 hover:text-white transition-all transform hover:-translate-y-1">
+                 class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-600 hover:text-white transition-all transform hover:-translate-y-1">
                 <app-icon name="instagram" class="w-5 h-5"></app-icon>
               </a>
               <a *ngIf="cfg.socials.facebook" [href]="cfg.socials.facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook"

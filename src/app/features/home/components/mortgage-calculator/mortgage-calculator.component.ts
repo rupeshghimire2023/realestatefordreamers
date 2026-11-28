@@ -33,7 +33,7 @@ export function calculateMonthlyPayment(
     <section class="py-24 bg-slate-900 relative overflow-hidden">
       
       <!-- Ambient Background Effects -->
-      <div class="absolute top-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+      <div class="absolute top-0 left-0 w-96 h-96 bg-brand-600/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
       <div class="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
 
       <div class="container mx-auto px-6 relative z-10">
@@ -42,8 +42,8 @@ export function calculateMonthlyPayment(
           <!-- Left Side: Text & Result -->
           <div>
             <div class="inline-flex items-center gap-2 mb-4">
-              <div class="w-8 h-0.5 bg-amber-500"></div>
-              <span class="text-amber-500 font-bold tracking-widest text-sm uppercase">Financial Clarity</span>
+              <div class="w-8 h-0.5 bg-brand-600"></div>
+              <span class="text-brand-600 font-bold tracking-widest text-sm uppercase">Financial Clarity</span>
             </div>
             
             <h2 class="text-3xl md:text-5xl font-serif font-bold text-white mb-6 leading-tight">
@@ -88,13 +88,13 @@ export function calculateMonthlyPayment(
                 <label for="calc-price" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Home Price</label>
                 <div class="relative group">
                   <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <span class="text-slate-400 font-serif text-lg group-focus-within:text-amber-500 transition-colors">$</span>
+                    <span class="text-slate-400 font-serif text-lg group-focus-within:text-brand-600 transition-colors">$</span>
                   </div>
                   <input id="calc-price" type="number" min="0" [(ngModel)]="price"
-                         class="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-amber-500 focus:ring-0 outline-none font-bold text-slate-900 text-lg transition-all placeholder:text-slate-300">
+                         class="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-brand-600 focus:ring-0 outline-none font-bold text-slate-900 text-lg transition-all placeholder:text-slate-300">
                 </div>
                 <input type="range" min="100000" max="2000000" step="5000" [(ngModel)]="price" aria-label="Home price slider"
-                       class="w-full mt-3 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                       class="w-full mt-3 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600">
               </div>
 
               <!-- Down Payment Input -->
@@ -102,10 +102,10 @@ export function calculateMonthlyPayment(
                 <label for="calc-down" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Down Payment</label>
                 <div class="relative group">
                   <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <span class="text-slate-400 font-serif text-lg group-focus-within:text-amber-500 transition-colors">$</span>
+                    <span class="text-slate-400 font-serif text-lg group-focus-within:text-brand-600 transition-colors">$</span>
                   </div>
                   <input id="calc-down" type="number" min="0" [(ngModel)]="downPayment"
-                         class="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-amber-500 focus:ring-0 outline-none font-bold text-slate-900 text-lg transition-all">
+                         class="w-full pl-10 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-brand-600 focus:ring-0 outline-none font-bold text-slate-900 text-lg transition-all">
                 </div>
               </div>
 
@@ -115,9 +115,9 @@ export function calculateMonthlyPayment(
                   <label for="calc-rate" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Interest Rate</label>
                   <div class="relative group">
                     <input id="calc-rate" type="number" min="0" step="0.1" [(ngModel)]="interestRate"
-                           class="w-full pl-4 pr-8 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-amber-500 focus:ring-0 outline-none font-bold text-slate-900 text-lg transition-all">
+                           class="w-full pl-4 pr-8 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-brand-600 focus:ring-0 outline-none font-bold text-slate-900 text-lg transition-all">
                     <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                      <span class="text-slate-400 font-bold group-focus-within:text-amber-500 transition-colors">%</span>
+                      <span class="text-slate-400 font-bold group-focus-within:text-brand-600 transition-colors">%</span>
                     </div>
                   </div>
                 </div>
@@ -125,7 +125,7 @@ export function calculateMonthlyPayment(
                   <label for="calc-term" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Loan Term</label>
                   <div class="relative">
                     <select id="calc-term" [(ngModel)]="termYears"
-                            class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-amber-500 focus:ring-0 outline-none font-bold text-slate-900 text-lg appearance-none transition-all cursor-pointer">
+                            class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-xl focus:border-brand-600 focus:ring-0 outline-none font-bold text-slate-900 text-lg appearance-none transition-all cursor-pointer">
                       <option [ngValue]="30">30 Years</option>
                       <option [ngValue]="15">15 Years</option>
                       <option [ngValue]="10">10 Years</option>

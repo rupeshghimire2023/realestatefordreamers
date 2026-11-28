@@ -42,7 +42,7 @@ export const REALTOR_DATA: SiteConfig = {
       <p class="mb-6">
         Although constant relocation was challenging, it sparked a lifelong passion for seeing new homes and meeting new people.
       </p>
-      <div class="bg-slate-50 border-l-4 border-amber-500 p-5 rounded-r-lg mb-6 italic text-slate-700 shadow-sm">
+      <div class="bg-slate-50 border-l-4 border-brand-600 p-5 rounded-r-lg mb-6 italic text-slate-700 shadow-sm">
         "Rich Dad Poor Dad" by Robert T. Kiyosaki wasn't just a book I read young—it was the spark that confirmed real estate was my calling.
       </div>
       <p>

@@ -4,7 +4,7 @@
   <ng-container *ngIf="listing.status === 'active'">
     <!-- Dark Backdrop for Header -->
     <div class="bg-slate-900 pt-32 pb-48 relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500 rounded-full blur-3xl opacity-10 -mr-16 -mt-16"></div>
+      <div class="absolute top-0 right-0 w-64 h-64 bg-brand-600 rounded-full blur-3xl opacity-10 -mr-16 -mt-16"></div>
       <div class="absolute bottom-0 left-0 w-64 h-64 bg-slate-700 rounded-full blur-3xl opacity-20 -ml-16 -mb-16"></div>
       
       <div class="container mx-auto px-6 relative z-10">
@@ -13,12 +13,12 @@
             <span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 inline-block shadow-lg">Active Listing</span>
             <h1 class="text-3xl md:text-5xl font-serif font-bold leading-tight">{{ listing.title }}</h1>
             <p class="text-slate-300 text-lg flex items-center gap-2 mt-3">
-              <app-icon name="map-pin" class="w-5 h-5 text-amber-500"></app-icon> {{ listing.address }}
+              <app-icon name="map-pin" class="w-5 h-5 text-brand-600"></app-icon> {{ listing.address }}
             </p>
           </div>
           <div class="md:text-right">
             <p class="text-slate-400 text-sm uppercase tracking-widest mb-1">List Price</p>
-            <p class="text-4xl font-serif font-bold text-amber-500">${{ listing.price | number }}</p>
+            <p class="text-4xl font-serif font-bold text-brand-600">${{ listing.price | number }}</p>
           </div>
         </div>
       </div>
@@ -55,7 +55,7 @@
           <h3 class="text-2xl font-serif font-bold text-slate-900 mb-6">Features & Amenities</h3>
           <ul class="grid md:grid-cols-2 gap-4">
             <li *ngFor="let feat of listing.features" class="flex items-center gap-3 text-slate-700 p-3 bg-white rounded-lg shadow-sm border border-slate-100">
-              <div class="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+              <div class="w-8 h-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-700">
                 <app-icon name="star" class="w-4 h-4"></app-icon>
               </div>
               {{ feat }}
@@ -69,7 +69,7 @@
             <p class="text-slate-500 text-sm">Schedule a private tour of this property.</p>
           </div>
           <button type="button" (click)="contactRealtor('buying')" 
-                  class="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-amber-600 transition-all mb-4 shadow-lg hover:shadow-amber-500/20">
+                  class="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-brand-700 transition-all mb-4 shadow-lg hover:shadow-brand-600/20">
             Schedule a Tour
           </button>
           <button type="button" (click)="contactRealtor('other')" 
@@ -92,7 +92,7 @@
 
       <div class="container mx-auto px-6 relative z-10 text-center">
         <div class="inline-block animate-bounce mb-6">
-           <span class="bg-amber-500 text-white px-6 py-2 rounded-full font-bold tracking-widest text-sm uppercase shadow-2xl">Coming Soon</span>
+           <span class="bg-brand-600 text-white px-6 py-2 rounded-full font-bold tracking-widest text-sm uppercase shadow-2xl">Coming Soon</span>
         </div>
         
         <h1 class="text-5xl md:text-8xl font-serif font-bold text-white mb-8 tracking-tight">{{ listing.address }}</h1>
@@ -118,7 +118,7 @@
         </div>
 
         <button type="button" (click)="contactRealtor('buying')"
-                class="px-10 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-amber-500 hover:text-white transition-all transform hover:scale-105 shadow-2xl">
+                class="px-10 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-brand-600 hover:text-white transition-all transform hover:scale-105 shadow-2xl">
           Join Early Access List
         </button>
       </div>
@@ -152,7 +152,7 @@
           
           <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-lg">
             <h4 class="font-bold text-slate-900 mb-6 flex items-center gap-2">
-              <div class="w-2 h-6 bg-amber-500 rounded-full"></div> Sale Highlights
+              <div class="w-2 h-6 bg-brand-600 rounded-full"></div> Sale Highlights
             </h4>
             <div class="grid grid-cols-2 gap-y-6 gap-x-4">
               <div>
@@ -160,7 +160,7 @@
                 <p class="text-xl font-bold text-slate-700 decoration-slate-400 line-through">${{ listing.price | number }}</p>
               </div>
               <div>
-                <p class="text-xs text-amber-600 uppercase tracking-wider font-bold">Sold Price</p>
+                <p class="text-xs text-brand-700 uppercase tracking-wider font-bold">Sold Price</p>
                 <p class="text-2xl font-bold text-slate-900">${{ listing.soldPrice | number }}</p>
               </div>
               <div>
@@ -173,7 +173,7 @@
 
         <!-- NEW: Home Valuation Lead Form -->
         <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden group">
-          <div class="absolute top-0 right-0 w-48 h-48 bg-amber-500 rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
+          <div class="absolute top-0 right-0 w-48 h-48 bg-brand-600 rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
           
           <div class="relative z-10">
             <h3 class="text-2xl font-serif font-bold mb-3">What is your home worth?</h3>
@@ -193,44 +193,44 @@
               <div>
                 <label for="sold-valuation-address" class="text-xs uppercase tracking-wider text-slate-500 font-bold mb-1 block">Property Address</label>
                 <input id="sold-valuation-address" formControlName="address" type="text" placeholder="123 Your Street" autocomplete="street-address" [maxlength]="limits.address" 
-                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all">
+                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-white placeholder-slate-500 transition-all">
               </div>
 
               <div class="grid grid-cols-3 gap-3">
                 <div>
                   <input formControlName="beds" type="number" min="0" placeholder="Beds" aria-label="Bedrooms" 
-                         class="w-full px-3 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all text-sm">
+                         class="w-full px-3 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-white placeholder-slate-500 transition-all text-sm">
                 </div>
                 <div>
                   <input formControlName="baths" type="number" min="0" step="0.5" placeholder="Baths" aria-label="Bathrooms" 
-                         class="w-full px-3 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all text-sm">
+                         class="w-full px-3 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-white placeholder-slate-500 transition-all text-sm">
                 </div>
                 <div>
                   <input formControlName="sqft" type="number" min="0" placeholder="SqFt" aria-label="Square feet" 
-                         class="w-full px-3 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all text-sm">
+                         class="w-full px-3 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-white placeholder-slate-500 transition-all text-sm">
                 </div>
               </div>
 
               <!-- Contact Info -->
               <div class="grid grid-cols-2 gap-3">
                 <input formControlName="firstName" type="text" placeholder="First Name" aria-label="First name" autocomplete="given-name" [maxlength]="limits.name" 
-                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all text-sm">
+                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-white placeholder-slate-500 transition-all text-sm">
                 <input formControlName="lastName" type="text" placeholder="Last Name" aria-label="Last name" autocomplete="family-name" [maxlength]="limits.name" 
-                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all text-sm">
+                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-white placeholder-slate-500 transition-all text-sm">
               </div>
               
               <div class="grid grid-cols-2 gap-3">
                  <input formControlName="email" type="email" placeholder="Email" aria-label="Email address" autocomplete="email" [maxlength]="limits.email" 
-                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all text-sm">
+                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-white placeholder-slate-500 transition-all text-sm">
                  <input formControlName="phone" type="tel" placeholder="Phone" aria-label="Phone number" autocomplete="tel" [maxlength]="limits.phone"
                        [class.border-red-500]="phoneInvalid()" [attr.aria-invalid]="phoneInvalid()" 
-                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-white placeholder-slate-500 transition-all text-sm">
+                       class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-white placeholder-slate-500 transition-all text-sm">
               </div>
               <p *ngIf="phoneInvalid()" class="text-red-400 text-xs -mt-2">Please enter a valid phone number (10+ digits)</p>
 
               <button type="submit" 
                       [disabled]="valuationForm.invalid || isSubmitting()"
-                      class="w-full py-4 mt-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-amber-500/25 transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                      class="w-full py-4 mt-2 bg-gradient-to-r from-brand-600 to-brand-700 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-brand-600/25 transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
                 {{ isSubmitting() ? 'Sending Request...' : 'Get My Free Valuation' }}
               </button>
 
@@ -251,10 +251,10 @@
   <!-- Not found (listing() === null) -->
   <div *ngIf="listing() === null; else loading" class="min-h-screen bg-slate-900 flex items-center justify-center px-6 pt-24 text-center">
     <div>
-      <p class="text-amber-500 font-semibold tracking-widest text-sm uppercase mb-4">Listing not found</p>
+      <p class="text-brand-600 font-semibold tracking-widest text-sm uppercase mb-4">Listing not found</p>
       <h1 class="text-3xl md:text-5xl font-serif font-bold text-white mb-4">This property isn't available</h1>
       <p class="text-slate-400 mb-10 max-w-lg mx-auto">It may have been removed, or the link may be incorrect.</p>
-      <a routerLink="/portfolio" class="inline-block px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-amber-500 hover:text-white transition-all">
+      <a routerLink="/portfolio" class="inline-block px-8 py-4 bg-white text-slate-900 font-bold rounded-full hover:bg-brand-600 hover:text-white transition-all">
         Browse the portfolio
       </a>
     </div>
@@ -263,6 +263,6 @@
 
 <ng-template #loading>
   <div class="min-h-screen flex items-center justify-center bg-slate-50" role="status" aria-label="Loading listing">
-    <div class="animate-spin w-12 h-12 border-4 border-slate-200 border-t-amber-500 rounded-full"></div>
+    <div class="animate-spin w-12 h-12 border-4 border-slate-200 border-t-brand-600 rounded-full"></div>
   </div>
 </ng-template>

@@ -10,7 +10,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
   template: `
     <section class="py-24 bg-white relative overflow-hidden">
       <!-- Decorative background elements -->
-      <div class="absolute top-0 left-0 w-64 h-64 bg-amber-50 rounded-full blur-3xl opacity-60 -translate-x-1/2 -translate-y-1/2"></div>
+      <div class="absolute top-0 left-0 w-64 h-64 bg-brand-50 rounded-full blur-3xl opacity-60 -translate-x-1/2 -translate-y-1/2"></div>
       <div class="absolute bottom-0 right-0 w-96 h-96 bg-slate-50 rounded-full blur-3xl opacity-60 translate-x-1/3 translate-y-1/3"></div>
 
       <div class="container mx-auto px-6 relative z-10">
@@ -18,14 +18,14 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
           
           <!-- Left Column: Image -->
           <div class="relative order-2 lg:order-1">
-            <div class="absolute -top-4 -left-4 w-24 h-24 bg-amber-100 rounded-full opacity-50 z-0"></div>
+            <div class="absolute -top-4 -left-4 w-24 h-24 bg-brand-100 rounded-full opacity-50 z-0"></div>
             <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-slate-100 rounded-full opacity-50 z-0"></div>
             
             <img [src]="cfg.realtor.headshotUrl" [appFallback]="cfg.branding.fullLogo" fallbackFit="contain" [alt]="'Portrait of ' + cfg.realtor.fullName"
                  class="relative z-10 rounded-2xl shadow-2xl w-full object-cover h-[600px]" loading="lazy" fetchpriority="low">
             
             <!-- Experience Badge -->
-            <div class="absolute bottom-8 -left-6 bg-white p-6 rounded-xl shadow-xl z-20 border-l-4 border-amber-500">
+            <div class="absolute bottom-8 -left-6 bg-white p-6 rounded-xl shadow-xl z-20 border-l-4 border-brand-600">
               <p class="text-slate-500 text-xs font-bold uppercase tracking-wide mb-1">Serving Since</p>
               <p class="text-4xl font-bold text-slate-900">{{ cfg.realtor.startedYear }}</p>
             </div>
@@ -34,12 +34,12 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
           <!-- Right Column: Content -->
           <div class="order-1 lg:order-2">
             <div class="mb-4 flex items-center gap-2">
-               <span class="w-8 h-0.5 bg-amber-500"></span>
-               <span class="text-amber-600 font-semibold tracking-wider text-sm uppercase">{{ cfg.realtor.brokerage }}</span>
+               <span class="w-8 h-0.5 bg-brand-600"></span>
+               <span class="text-brand-700 font-semibold tracking-wider text-sm uppercase">{{ cfg.realtor.brokerage }}</span>
             </div>
             
             <h2 class="text-3xl md:text-5xl font-serif font-bold text-slate-900 mb-6 leading-tight">
-              Turning the Stress of Moving into the <span class="text-amber-500">Joy of Home</span>.
+              Turning the Stress of Moving into the <span class="text-brand-600">Joy of Home</span>.
             </h2>
             
             <!-- Bio comes from realtor-data.ts (content.aboutBioLong) -->
@@ -77,7 +77,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
                <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" class="w-14 h-14 rounded-full border-2 border-white shadow-md object-cover" alt="" loading="lazy">
                <div>
                   <p class="font-serif font-bold text-slate-900 text-lg">{{ cfg.realtor.fullName }}</p>
-                  <p class="text-xs text-amber-600 uppercase tracking-wide font-bold">{{ cfg.realtor.title }}</p>
+                  <p class="text-xs text-brand-700 uppercase tracking-wide font-bold">{{ cfg.realtor.title }}</p>
                </div>
             </div>
 

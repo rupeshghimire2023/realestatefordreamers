@@ -20,12 +20,12 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
           <!-- Left: Value Proposition -->
           <div class="order-2 lg:order-1">
             <div class="inline-flex items-center gap-2 mb-4">
-              <div class="w-8 h-0.5 bg-amber-500"></div>
-              <span class="text-amber-600 font-semibold tracking-wider text-sm uppercase">Sellers</span>
+              <div class="w-8 h-0.5 bg-brand-600"></div>
+              <span class="text-brand-700 font-semibold tracking-wider text-sm uppercase">Sellers</span>
             </div>
             
             <h2 class="text-4xl font-serif font-bold text-slate-900 mb-6 leading-tight">
-              Curious what your home is <span class="text-amber-500">worth?</span>
+              Curious what your home is <span class="text-brand-600">worth?</span>
             </h2>
             <p class="text-slate-600 mb-8 text-lg leading-relaxed">
               The market is constantly changing. Get a professional, data-driven Comparative Market Analysis (CMA) sent directly to your inbox—no automated guesses, just real expert analysis.
@@ -33,7 +33,7 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
 
             <div class="space-y-6">
               <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 mt-1 shrink-0">
+                <div class="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 mt-1 shrink-0">
                   <app-icon name="star-filled" class="w-5 h-5"></app-icon>
                 </div>
                 <div>
@@ -42,7 +42,7 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
                 </div>
               </div>
               <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 mt-1 shrink-0">
+                <div class="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 mt-1 shrink-0">
                   <app-icon name="home" class="w-5 h-5"></app-icon>
                 </div>
                 <div>
@@ -62,7 +62,7 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
                 <input id="valuation-website" type="text" formControlName="website" tabindex="-1" autocomplete="off">
               </div>
               <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                <app-icon name="home" class="w-5 h-5 text-amber-500"></app-icon> Free Home Valuation
+                <app-icon name="home" class="w-5 h-5 text-brand-600"></app-icon> Free Home Valuation
               </h3>
               
               <!-- Property Details -->
@@ -76,7 +76,7 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
                          [maxlength]="limits.address"
                          placeholder="Street, city, ZIP" 
                          aria-describedby="valuation-address-hint"
-                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all placeholder:text-slate-400">
+                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-slate-700 transition-all placeholder:text-slate-400">
                   
                   <p id="valuation-address-hint" class="text-slate-400 text-xs mt-1">Georgia properties only.</p>
                 </div>
@@ -85,17 +85,17 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
                   <div>
                     <label for="valuation-beds" class="block text-xs font-bold text-slate-500 uppercase mb-1">Beds</label>
                     <input id="valuation-beds" formControlName="beds" type="number" min="0" placeholder="4" 
-                           class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                           class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-slate-700 transition-all">
                   </div>
                   <div>
                     <label for="valuation-baths" class="block text-xs font-bold text-slate-500 uppercase mb-1">Baths</label>
                     <input id="valuation-baths" formControlName="baths" type="number" min="0" step="0.5" placeholder="3" 
-                           class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                           class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-slate-700 transition-all">
                   </div>
                   <div>
                     <label for="valuation-sqft" class="block text-xs font-bold text-slate-500 uppercase mb-1">Sq Ft</label>
                     <input id="valuation-sqft" formControlName="sqft" type="number" min="0" placeholder="2500" 
-                           class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                           class="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-slate-700 transition-all">
                   </div>
                 </div>
               </div>
@@ -104,22 +104,22 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
               <div class="space-y-4 mb-6 pt-6 border-t border-slate-100">
                 <div class="grid grid-cols-2 gap-3">
                   <input formControlName="firstName" type="text" placeholder="First Name" aria-label="First name" autocomplete="given-name" [maxlength]="limits.name"
-                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-slate-700 transition-all">
                   <input formControlName="lastName" type="text" placeholder="Last Name" aria-label="Last name" autocomplete="family-name" [maxlength]="limits.name"
-                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-slate-700 transition-all">
                 </div>
                 <input formControlName="email" type="email" placeholder="Email Address" aria-label="Email address" autocomplete="email" [maxlength]="limits.email"
-                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-slate-700 transition-all">
                 <input formControlName="phone" type="tel" placeholder="Phone Number" aria-label="Phone number" autocomplete="tel" [maxlength]="limits.phone"
                        [class.border-red-500]="phoneInvalid()"
                        [attr.aria-invalid]="phoneInvalid()"
-                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-slate-700 transition-all">
+                       class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-600 outline-none text-slate-700 transition-all">
                 <p *ngIf="phoneInvalid()" class="text-red-500 text-xs -mt-2">Please enter a valid phone number (10+ digits)</p>
               </div>
 
               <button type="submit" 
                       [disabled]="valuationForm.invalid || isSubmitting()"
-                      class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-amber-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2">
+                      class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-brand-700 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2">
                 <span *ngIf="isSubmitting()" class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
                 {{ isSubmitting() ? 'Sending Request...' : 'Get My Estimate' }}
               </button>

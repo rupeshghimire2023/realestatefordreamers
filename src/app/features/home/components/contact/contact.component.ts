@@ -25,8 +25,8 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
           <!-- Left: Contact Details -->
           <div>
             <div class="inline-flex items-center gap-2 mb-4">
-              <div class="w-8 h-0.5 bg-amber-500"></div>
-              <span class="text-amber-600 font-semibold tracking-wider text-sm uppercase">Get in Touch</span>
+              <div class="w-8 h-0.5 bg-brand-600"></div>
+              <span class="text-brand-700 font-semibold tracking-wider text-sm uppercase">Get in Touch</span>
             </div>
             
             <h2 class="text-4xl font-serif font-bold text-slate-900 mb-6">Let's Discuss Your Dream.</h2>
@@ -41,7 +41,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
                 <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" loading="lazy" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 shadow-md">
                 <div>
                   <h3 class="text-xl font-serif font-bold text-slate-900">{{ cfg.realtor.fullName }}</h3>
-                  <p class="text-amber-600 font-medium text-sm uppercase tracking-wide mb-2">Realtor® | {{ cfg.realtor.brokerage }}</p>
+                  <p class="text-brand-700 font-medium text-sm uppercase tracking-wide mb-2">Realtor® | {{ cfg.realtor.brokerage }}</p>
                   <p class="text-slate-500 text-sm">Top Producer {{ cfg.realtor.topProducerYears.join(', ') }}</p>
                 </div>
               </div>
@@ -54,7 +54,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
                   </div>
                   <div>
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-bold">Call / Text</p>
-                    <a [href]="'tel:' + cfg.realtor.phone" class="text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors">{{ cfg.realtor.phoneDisplay }}</a>
+                    <a [href]="'tel:' + cfg.realtor.phone" class="text-lg font-bold text-slate-900 hover:text-brand-700 transition-colors">{{ cfg.realtor.phoneDisplay }}</a>
                   </div>
                 </div>
 
@@ -64,7 +64,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
                   </div>
                   <div>
                     <p class="text-xs text-slate-400 uppercase tracking-wider font-bold">Email</p>
-                    <a [href]="'mailto:' + cfg.realtor.email" class="text-lg font-bold text-slate-900 hover:text-amber-600 transition-colors">{{ cfg.realtor.email }}</a>
+                    <a [href]="'mailto:' + cfg.realtor.email" class="text-lg font-bold text-slate-900 hover:text-brand-700 transition-colors">{{ cfg.realtor.email }}</a>
                   </div>
                 </div>
 
@@ -73,7 +73,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
                   <p class="text-xs text-slate-400 uppercase tracking-wider font-bold mb-4">Follow My Journey</p>
                   <div class="flex gap-4">
                     <a *ngIf="cfg.socials.instagram" [href]="cfg.socials.instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                       class="w-10 h-10 rounded bg-slate-200 flex items-center justify-center text-slate-600 hover:bg-amber-500 hover:text-white transition-all transform hover:-translate-y-1">
+                       class="w-10 h-10 rounded bg-slate-200 flex items-center justify-center text-slate-600 hover:bg-brand-600 hover:text-white transition-all transform hover:-translate-y-1">
                       <app-icon name="instagram" class="w-5 h-5"></app-icon>
                     </a>
                     <a *ngIf="cfg.socials.facebook" [href]="cfg.socials.facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
@@ -97,7 +97,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
 
           <!-- Right: Contact Form -->
           <div class="bg-white p-8 md:p-10 rounded-3xl shadow-2xl border border-slate-100 relative">
-            <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500 rounded-bl-[100px] opacity-10 -z-0"></div>
+            <div class="absolute top-0 right-0 w-24 h-24 bg-brand-600 rounded-bl-[100px] opacity-10 -z-0"></div>
             
             <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="relative z-10">
               <h3 class="text-2xl font-serif font-bold text-slate-900 mb-6">Send a Message</h3>
@@ -111,11 +111,11 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
               <div class="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
                   <label for="contact-first-name" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">First Name</label>
-                  <input id="contact-first-name" type="text" formControlName="firstName" autocomplete="given-name" [maxlength]="limits.name" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="First Name">
+                  <input id="contact-first-name" type="text" formControlName="firstName" autocomplete="given-name" [maxlength]="limits.name" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-brand-600 focus:ring-2 focus:ring-brand-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="First Name">
                 </div>
                 <div>
                   <label for="contact-last-name" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Last Name</label>
-                  <input id="contact-last-name" type="text" formControlName="lastName" autocomplete="family-name" [maxlength]="limits.name" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="Last Name">
+                  <input id="contact-last-name" type="text" formControlName="lastName" autocomplete="family-name" [maxlength]="limits.name" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-brand-600 focus:ring-2 focus:ring-brand-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="Last Name">
                 </div>
               </div>
 
@@ -125,7 +125,7 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
                        [class.border-red-500]="showError('phone')"
                        [attr.aria-invalid]="showError('phone')"
                        aria-describedby="contact-phone-error"
-                       class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="(555) 123-4567">
+                       class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-brand-600 focus:ring-2 focus:ring-brand-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="(555) 123-4567">
                 <div id="contact-phone-error" *ngIf="showError('phone')" class="text-red-500 text-xs mt-1">
                   Please enter a valid phone number (10+ digits)
                 </div>
@@ -136,14 +136,14 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
                 <input id="contact-email" type="email" formControlName="email" autocomplete="email" [maxlength]="limits.email"
                        [class.border-red-500]="showError('email')"
                        [attr.aria-invalid]="showError('email')"
-                       class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="jane@example.com">
+                       class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-brand-600 focus:ring-2 focus:ring-brand-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="jane@example.com">
                 <div *ngIf="showError('email')" class="text-red-500 text-xs mt-1">Please enter a valid email address</div>
               </div>
 
               <div class="mb-6">
                 <label for="contact-interest" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">I'm interested in...</label>
                 <div class="relative">
-                  <select id="contact-interest" formControlName="interest" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all appearance-none cursor-pointer text-slate-700">
+                  <select id="contact-interest" formControlName="interest" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-brand-600 focus:ring-2 focus:ring-brand-200/50 outline-none transition-all appearance-none cursor-pointer text-slate-700">
                     <option value="buying">Buying a Home</option>
                     <option value="selling">Selling a Home</option>
                     <option value="other">General Inquiry</option>
@@ -156,12 +156,12 @@ import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback
 
               <div class="mb-8">
                 <label for="contact-message" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Message</label>
-                <textarea id="contact-message" formControlName="message" rows="4" [maxlength]="limits.message" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="How can I help you?"></textarea>
+                <textarea id="contact-message" formControlName="message" rows="4" [maxlength]="limits.message" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:border-brand-600 focus:ring-2 focus:ring-brand-200/50 outline-none transition-all placeholder:text-slate-300" placeholder="How can I help you?"></textarea>
               </div>
 
               <button type="submit" 
                       [disabled]="contactForm.invalid || isSubmitting()"
-                      class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-amber-600 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2 group">
+                      class="w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-brand-700 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2 group">
                 <span *ngIf="isSubmitting()" class="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
                 <span *ngIf="!isSubmitting()">Send Message</span>
                 <app-icon *ngIf="!isSubmitting()" name="send" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></app-icon>
