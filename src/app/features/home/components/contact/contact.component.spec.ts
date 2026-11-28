@@ -44,13 +44,18 @@ describe('ContactComponent', () => {
     const form = fixture.componentInstance.contactForm;
     form.setValue({
       firstName: 'Jane', lastName: 'Doe', email: 'jane@example.com',
-      phone: '(470) 555-0100', interest: 'selling', message: 'Hello'
+      phone: '(470) 555-0100', interest: 'selling', message: 'Hello', website: ''
     });
 
     fixture.componentInstance.onSubmit();
     await fixture.whenStable();
 
-    expect(submitLead).toHaveBeenCalledWith(expect.objectContaining({ email: 'jane@example.com', interest: 'selling' }));
+    expect(submitLead).toHaveBeenCalledWith(
+      expect.objectContaining({ email: 'jane@example.com', interest: 'selling' }),
+      { honeypot: '' }
+    );
+    // The spam-trap field must not reach Firestore (the leads rule only allows known fields).
+    expect(submitLead.mock.calls[0][0]).not.toHaveProperty('website');
     expect(form.getRawValue().interest).toBe('buying');
     expect(fixture.componentInstance.submitSuccess()).toBe(true);
   });

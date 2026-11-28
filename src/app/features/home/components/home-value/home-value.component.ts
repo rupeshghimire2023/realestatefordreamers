@@ -61,7 +61,12 @@ const GEORGIA_BOUNDS = { south: 30.355757, west: -85.605165, north: 35.000659, e
 
           <!-- Right: Valuation Form -->
           <div class="order-1 lg:order-2 bg-white p-8 rounded-3xl shadow-xl border border-slate-100 relative">
-            <form [formGroup]="valuationForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="valuationForm" (ngSubmit)="onSubmit()" class="relative">
+              <!-- Spam trap: off-screen and hidden from screen readers. People never fill it in; bots usually do. -->
+              <div class="absolute -left-[10000px] w-px h-px overflow-hidden" aria-hidden="true">
+                <label for="valuation-website">Website</label>
+                <input id="valuation-website" type="text" formControlName="website" tabindex="-1" autocomplete="off">
+              </div>
               <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                 <app-icon name="home" class="w-5 h-5 text-amber-500"></app-icon> Free Home Valuation
               </h3>
@@ -163,7 +168,8 @@ export class HomeValueComponent {
     firstName: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.name)]],
     lastName: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.name)]],
     email: ['', [Validators.required, Validators.email, Validators.maxLength(LEAD_LIMITS.email)]],
-    phone: ['', [Validators.required, phoneValidator]]
+    phone: ['', [Validators.required, phoneValidator]],
+    website: [''] // spam trap, see template
   });
 
   constructor() {
@@ -233,7 +239,7 @@ export class HomeValueComponent {
       phone: val.phone,
       interest: 'selling',
       message
-    })
+    }, { honeypot: val.website })
       .then(() => {
         this.isSubmitting.set(false);
         this.submitSuccess.set(true);

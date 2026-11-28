@@ -39,7 +39,7 @@ service cloud.firestore {
                     && isText(request.resource.data.email, 200)
                     && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
                     && isText(request.resource.data.phone, 40)
-                    && (request.resource.data.interest == null || isText(request.resource.data.interest, 40))
+                    && request.resource.data.interest in ['buying', 'selling', 'other']
                     && isText(request.resource.data.message, 5000)
                     && request.resource.data.status == 'new'
                     && request.resource.data.timestamp == request.time;

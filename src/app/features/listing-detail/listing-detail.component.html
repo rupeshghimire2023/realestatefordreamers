@@ -181,7 +181,13 @@
               Enter your home details below for a professional valuation.
             </p>
             
-            <form [formGroup]="valuationForm" (ngSubmit)="onValuationSubmit()" class="space-y-4">
+            <form [formGroup]="valuationForm" (ngSubmit)="onValuationSubmit()" class="space-y-4 relative">
+
+              <!-- Spam trap: off-screen and hidden from screen readers. People never fill it in; bots usually do. -->
+              <div class="absolute -left-[10000px] w-px h-px overflow-hidden" aria-hidden="true">
+                <label for="sold-valuation-website">Website</label>
+                <input id="sold-valuation-website" type="text" formControlName="website" tabindex="-1" autocomplete="off">
+              </div>
               
               <!-- Property Details -->
               <div>

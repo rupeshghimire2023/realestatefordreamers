@@ -49,7 +49,8 @@ export class ListingDetailComponent {
     address: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.address)]],
     beds: this.fb.control<number | null>(null, Validators.min(0)),
     baths: this.fb.control<number | null>(null, Validators.min(0)),
-    sqft: this.fb.control<number | null>(null, Validators.min(0))
+    sqft: this.fb.control<number | null>(null, Validators.min(0)),
+    website: [''] // spam trap, see template
   });
 
   constructor() {
@@ -88,7 +89,7 @@ export class ListingDetailComponent {
       phone: val.phone,
       interest: 'selling', // This triggers the Seller's Guide email automatically!
       message
-    })
+    }, { honeypot: val.website })
       .then(() => {
         this.isSubmitting.set(false);
         this.submitSuccess.set(true);

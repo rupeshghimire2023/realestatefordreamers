@@ -7,7 +7,8 @@
     "build": "ng build",
     "build:netlify": "node set-env.js && ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:functions": "tsc -p netlify --noEmit && vitest run --config netlify/vitest.config.mts"
   },
   "prettier": {
     "printWidth": 100,
@@ -40,6 +41,7 @@
     "@angular/build": "^21.0.2",
     "@angular/cli": "^21.0.2",
     "@angular/compiler-cli": "^21.0.0",
+    "@netlify/functions": "^6.1.2",
     "@tailwindcss/typography": "^0.5.20",
     "autoprefixer": "^10.4.22",
     "jsdom": "^27.1.0",

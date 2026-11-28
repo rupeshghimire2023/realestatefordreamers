@@ -3,12 +3,17 @@
   command = "npm run build:netlify"
   publish = "dist/real-estate-dreamers/browser"
 
-[build.environment]
-  # This tells Netlify: "I know my keys are public, please let me deploy."
-  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+# Secret scanning is on: a build fails if a secret ends up in the site files.
+# In Netlify, mark CHAT_API_KEY and GOOGLE_SCRIPT_URL as "Contains secret values".
+# The Firebase config and the Maps key are public by design (they ship to the
+# browser). If smart detection flags them, list those values in a
+# SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES variable in the Netlify UI rather
+# than turning scanning off.
 
+# Functions (chat, lead) set their own URL paths and rate limits in code.
 [functions]
   directory = "netlify/functions"
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/*"

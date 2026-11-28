@@ -100,6 +100,12 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
             
             <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="relative z-10">
               <h3 class="text-2xl font-serif font-bold text-slate-900 mb-6">Send a Message</h3>
+
+              <!-- Spam trap: off-screen and hidden from screen readers. People never fill it in; bots usually do. -->
+              <div class="absolute -left-[10000px] w-px h-px overflow-hidden" aria-hidden="true">
+                <label for="contact-website">Website</label>
+                <input id="contact-website" type="text" formControlName="website" tabindex="-1" autocomplete="off">
+              </div>
               
               <div class="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
@@ -193,7 +199,8 @@ export class ContactComponent {
     email: ['', [Validators.required, Validators.email, Validators.maxLength(LEAD_LIMITS.email)]],
     phone: ['', [Validators.required, phoneValidator]],
     interest: ['buying' as LeadInterest],
-    message: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.message)]]
+    message: ['', [Validators.required, Validators.maxLength(LEAD_LIMITS.message)]],
+    website: [''] // spam trap, see template
   });
 
   constructor() {
@@ -222,7 +229,8 @@ export class ContactComponent {
     if (this.contactForm.invalid) return;
     this.isSubmitting.set(true);
     this.submitError.set('');
-    this.leadService.submitLead(this.contactForm.getRawValue())
+    const { website, ...lead } = this.contactForm.getRawValue();
+    this.leadService.submitLead(lead, { honeypot: website })
       .then(() => {
         this.isSubmitting.set(false);
         this.submitSuccess.set(true);
