@@ -1,11 +1,19 @@
-import { Component, HostListener, signal } from '@angular/core';
+import { Component, HostListener, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { IconComponent } from '../../../shared/components/icon/icon.component';
+import { ConfigService } from '../../services/config.service';
+import { SectionNavService } from '../../services/section-nav.service';
+
+/** A nav entry either scrolls to a home-page section or routes to a page. */
+interface NavItem {
+  label: string;
+  section?: string;
+  route?: string;
+}
 
 @Component({
   selector: 'app-header',
-  standalone: true,
   imports: [CommonModule, RouterModule, IconComponent],
   template: `
     <nav class="fixed w-full z-40 transition-all duration-300" 
@@ -13,10 +21,9 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
       <div class="container mx-auto px-6 flex justify-between items-center">
         
         <!-- Logo -->
-        <a routerLink="/" class="text-2xl md:text-3xl font-serif font-bold tracking-tight flex items-center gap-2 group cursor-pointer">
+        <a routerLink="/" (click)="onLogoClick()" class="text-2xl md:text-3xl font-serif font-bold tracking-tight flex items-center gap-2 group cursor-pointer">
           <div class="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
-           <img src="https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Flogo.png?alt=media&token=068a9e22-31a3-4d4a-8fe2-c84c8929de4f" 
-             />
+           <img [src]="cfg.branding.myLogo" [alt]="cfg.branding.websiteName" />
           </div>
           <span [ngClass]="{'text-slate-800': isScrolled(), 'text-white': !isScrolled(), 'text-slate-900': isMobileMenuOpen()}">
             Real Estate <span class="text-amber-500">for Dreamers</span>
@@ -25,15 +32,22 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
 
         <!-- Desktop Menu -->
         <div class="hidden md:flex items-center space-x-8">
-          <!-- CLEAN LOOP: No static <a> tags here, only the *ngFor -->
-          <a *ngFor="let item of navItems" 
-             (click)="handleNav(item)"
-             class="cursor-pointer font-medium hover:text-amber-500 transition-colors"
-             [ngClass]="{'text-slate-600': isScrolled(), 'text-white/90 hover:text-white': !isScrolled()}">
-            {{ item.label }}
-          </a>
+          <ng-container *ngFor="let item of navItems">
+            <a *ngIf="item.route; else sectionLink" [routerLink]="item.route"
+               class="cursor-pointer font-medium hover:text-amber-500 transition-colors"
+               [ngClass]="{'text-slate-600': isScrolled(), 'text-white/90 hover:text-white': !isScrolled()}">
+              {{ item.label }}
+            </a>
+            <ng-template #sectionLink>
+              <button type="button" (click)="goToSection(item.section!)"
+                      class="cursor-pointer font-medium hover:text-amber-500 transition-colors"
+                      [ngClass]="{'text-slate-600': isScrolled(), 'text-white/90 hover:text-white': !isScrolled()}">
+                {{ item.label }}
+              </button>
+            </ng-template>
+          </ng-container>
           
-          <button (click)="handleNav({action: 'scroll', target: 'contact'})" 
+          <button type="button" (click)="goToSection('contact')" 
                   class="px-6 py-2.5 rounded-full font-semibold transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
                   [ngClass]="{'bg-amber-500 text-white hover:bg-amber-600': isScrolled(), 'bg-white text-slate-900 hover:bg-slate-100': !isScrolled()}">
             Let's Talk
@@ -41,21 +55,31 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
         </div>
 
         <!-- Mobile Menu Button -->
-        <button class="md:hidden p-2 rounded-lg transition-colors"
+        <button type="button" class="md:hidden p-2 rounded-lg transition-colors"
                 (click)="toggleMenu()"
+                [attr.aria-label]="isMobileMenuOpen() ? 'Close menu' : 'Open menu'"
+                [attr.aria-expanded]="isMobileMenuOpen()"
+                aria-controls="mobile-menu"
                 [ngClass]="{'text-slate-800 hover:bg-slate-100': isScrolled() || isMobileMenuOpen(), 'text-white hover:bg-white/10': !isScrolled() && !isMobileMenuOpen()}">
           <app-icon [name]="isMobileMenuOpen() ? 'x' : 'menu'"></app-icon>
         </button>
       </div>
 
       <!-- Mobile Menu Overlay -->
-      <div *ngIf="isMobileMenuOpen()" class="absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-xl py-4 px-6 md:hidden flex flex-col space-y-4 animate-slideDown">
-        <a *ngFor="let item of navItems" 
-           (click)="handleNav(item)" 
-           class="text-lg font-medium text-slate-600 hover:text-amber-500 py-2 border-b border-slate-50 last:border-0">
-          {{ item.label }}
-        </a>
-        <button (click)="handleNav({action: 'scroll', target: 'contact'})" class="w-full bg-amber-500 text-white py-3 rounded-lg font-semibold shadow-md active:scale-95 transition-transform">
+      <div *ngIf="isMobileMenuOpen()" id="mobile-menu" class="absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-xl py-4 px-6 md:hidden flex flex-col space-y-4 animate-slideDown">
+        <ng-container *ngFor="let item of navItems">
+          <a *ngIf="item.route; else mobileSectionLink" [routerLink]="item.route" (click)="closeMenu()"
+             class="text-left text-lg font-medium text-slate-600 hover:text-amber-500 py-2 border-b border-slate-50">
+            {{ item.label }}
+          </a>
+          <ng-template #mobileSectionLink>
+            <button type="button" (click)="goToSection(item.section!)"
+                    class="text-left text-lg font-medium text-slate-600 hover:text-amber-500 py-2 border-b border-slate-50">
+              {{ item.label }}
+            </button>
+          </ng-template>
+        </ng-container>
+        <button type="button" (click)="goToSection('contact')" class="w-full bg-amber-500 text-white py-3 rounded-lg font-semibold shadow-md active:scale-95 transition-transform">
           Book Consultation
         </button>
       </div>
@@ -70,20 +94,20 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
   `]
 })
 export class HeaderComponent {
+  protected cfg = inject(ConfigService).config();
+  private sectionNav = inject(SectionNavService);
+
   isScrolled = signal(false);
   isMobileMenuOpen = signal(false);
 
-  // Ensuring the list is clean
-  navItems = [
-    { label: 'Home', action: 'scroll', target: 'home' },
-    { label: 'About', action: 'scroll', target: 'about' },
-    { label: 'Portfolio', action: 'route', target: '/portfolio' }, // Links to the full portfolio page
-    { label: 'Services', action: 'scroll', target: 'buying' },
-    { label: 'Blog', action: 'route', target: '/blog' },
-    { label: 'Stories', action: 'scroll', target: 'testimonials' }
+  readonly navItems: NavItem[] = [
+    { label: 'Home', section: 'home' },
+    { label: 'About', section: 'about' },
+    { label: 'Portfolio', route: '/portfolio' },
+    { label: 'Services', section: 'buying' },
+    { label: 'Blog', route: '/blog' },
+    { label: 'Stories', section: 'testimonials' }
   ];
-
-  constructor(private router: Router) {}
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -94,42 +118,18 @@ export class HeaderComponent {
     this.isMobileMenuOpen.update(v => !v);
   }
 
- handleNav(item: any) {
+  closeMenu() {
     this.isMobileMenuOpen.set(false);
-    
-    // 1. External Route
-    if (item.action === 'route') {
-      this.router.navigate([item.target]);
-      return;
-    }
-
-    // 2. Scroll Logic
-    const scrollFn = () => {
-      // Small timeout to allow View updates if needed
-      setTimeout(() => {
-        const element = document.getElementById(item.target);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        } else {
-          // Only fallback to top if the specific ID isn't found and it's not 'home'
-          if (item.target === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }, 300); // 300ms matches the @defer hydration speed usually
-    };
-
-    if (this.router.url === '/') {
-      scrollFn();
-    } else {
-      this.router.navigate(['/']).then(() => scrollFn());
-    }
   }
 
-  private scrollTo(elementId: string) {
-    const element = document.getElementById(elementId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  // routerLink handles other pages; on the home page it would do nothing, so scroll up instead.
+  onLogoClick() {
+    this.closeMenu();
+    if (this.sectionNav.isOnHome()) this.sectionNav.scrollTo('home');
+  }
+
+  goToSection(sectionId: string) {
+    this.closeMenu();
+    this.sectionNav.goTo(sectionId);
   }
 }

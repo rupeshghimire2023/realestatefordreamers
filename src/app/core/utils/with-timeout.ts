@@ -1,0 +1,8 @@
+/** Rejects if `promise` hasn't settled within `ms` milliseconds. */
+export function withTimeout<T>(promise: Promise<T>, ms: number, label = 'Operation'): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}

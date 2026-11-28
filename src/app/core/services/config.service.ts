@@ -4,19 +4,11 @@ import { REALTOR_DATA } from '../config/realtor-data';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
-  config = signal<SiteConfig>(REALTOR_DATA);
+  readonly config = signal<SiteConfig>(REALTOR_DATA).asReadonly();
 
-  constructor() {
-    this.applyTheme();
-  }
-
-  private applyTheme() {
-    const theme = this.config().theme;
-    const root = document.documentElement;
-
-    // Write CSS Variables to the DOM
-    root.style.setProperty('--color-primary', theme.primaryColor);
-    root.style.setProperty('--color-secondary', theme.secondaryColor);
-    root.style.setProperty('--color-accent', theme.accentColor);
+  /** "Portfolio | Real Estate for Dreamers" */
+  pageTitle(page?: string): string {
+    const site = this.config().branding.websiteName;
+    return page ? `${page} | ${site}` : site;
   }
 }

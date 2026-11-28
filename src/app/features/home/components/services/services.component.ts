@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../../../shared/components/icon/icon.component';
+import { JourneyTarget } from '../../../../core/models/models';
 
 @Component({
   selector: 'app-home-services',
-  standalone: true,
   imports: [CommonModule, IconComponent],
   template: `
-    <!-- FIX: Changed id="services" back to id="buying" so the Navbar link finds it -->
-    <section id="buying" class="py-24 bg-slate-50">
+    <!-- The id="buying" anchor lives on the wrapper in home.component.html (it exists before this deferred block loads) -->
+    <section class="py-24 bg-slate-50">
       <div class="container mx-auto px-6">
         
         <div class="text-center mb-16">
@@ -58,7 +58,7 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
                   </li>
                 </ul>
 
-                <button (click)="startJourney.emit('buying')" 
+                <button type="button" (click)="startJourney.emit('buying')" 
                         class="w-full py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-amber-500 hover:text-white transition-all shadow-lg flex items-center justify-center gap-2">
                   Start Buying Journey
                   <app-icon name="chevron-right" class="w-4 h-4"></app-icon>
@@ -104,7 +104,7 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
                   </li>
                 </ul>
 
-                <button (click)="startJourney.emit('selling')" 
+                <button type="button" (click)="startJourney.emit('selling')" 
                         class="w-full py-4 bg-amber-500 text-white font-bold rounded-xl hover:bg-white hover:text-slate-900 transition-all shadow-lg flex items-center justify-center gap-2">
                   Start Selling Journey
                   <app-icon name="chevron-right" class="w-4 h-4"></app-icon>
@@ -119,5 +119,5 @@ import { IconComponent } from '../../../../shared/components/icon/icon.component
   `
 })
 export class ServicesComponent {
-  @Output() startJourney = new EventEmitter<string>();
+  @Output() startJourney = new EventEmitter<JourneyTarget>();
 }

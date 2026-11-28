@@ -1,33 +1,33 @@
+// Generates src/environments/environment.ts from Netlify environment variables.
+// Run by `npm run build:netlify` (see netlify.toml); don't run it locally, it
+// overwrites your own environment.ts.
+//
+// Everything written here ends up in the browser bundle, so only values that are
+// safe to be public belong here. Server-side secrets (CHAT_API_KEY,
+// GOOGLE_SCRIPT_URL) are read by the Netlify functions at runtime instead.
 const fs = require('fs');
 const path = require('path');
 
-// FIX: Changed from '../src' to './src' because the script is now in the root
 const targetPath = path.resolve(__dirname, './src/environments/environment.ts');
-const environmentsDir = path.dirname(targetPath);
+fs.mkdirSync(path.dirname(targetPath), { recursive: true });
 
-// 2. Ensure directory exists
-if (!fs.existsSync(environmentsDir)) {
-  fs.mkdirSync(environmentsDir, { recursive: true });
-}
+const env = name => JSON.stringify(process.env[name] || '');
 
-// 3. Construct content
 const envConfigFile = `
 export const environment = {
   production: true,
-  geminiApiKey: ${JSON.stringify(process.env.GEMINI_API_KEY || "")},
-  googleScriptUrl: ${JSON.stringify(process.env.GOOGLE_SCRIPT_URL || "")},
+  googleMapsApiKey: ${env('GOOGLE_MAPS_API_KEY')},
   firebaseConfig: {
-    apiKey: ${JSON.stringify(process.env.FIREBASE_API_KEY || "")},
-    authDomain: ${JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN || "")},
-    projectId: ${JSON.stringify(process.env.FIREBASE_PROJECT_ID || "")},
-    storageBucket: ${JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET || "")},
-    messagingSenderId: ${JSON.stringify(process.env.FIREBASE_SENDER_ID || "")},
-    appId: ${JSON.stringify(process.env.FIREBASE_APP_ID || "")}
+    apiKey: ${env('FIREBASE_API_KEY')},
+    authDomain: ${env('FIREBASE_AUTH_DOMAIN')},
+    projectId: ${env('FIREBASE_PROJECT_ID')},
+    storageBucket: ${env('FIREBASE_STORAGE_BUCKET')},
+    messagingSenderId: ${env('FIREBASE_SENDER_ID')},
+    appId: ${env('FIREBASE_APP_ID')}
   }
 };
 `;
 
-// 4. Write file SYNCHRONOUSLY
 try {
   fs.writeFileSync(targetPath, envConfigFile);
   console.log(`✅ Output generated at ${targetPath}`);

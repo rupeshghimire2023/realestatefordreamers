@@ -5,10 +5,9 @@ import { Testimonial } from '../../../../core/models/models';
 
 @Component({
   selector: 'app-home-testimonials',
-  standalone: true,
   imports: [CommonModule, IconComponent],
   template: `
-    <section id="testimonials" class="py-24 bg-slate-50 relative overflow-hidden">
+    <section class="py-24 bg-slate-50 relative overflow-hidden">
       <!-- Decorative Background Text (Subtle) -->
       <div class="absolute top-10 left-10 text-[200px] leading-none font-serif text-slate-100 select-none -z-10 opacity-60">"</div>
       
@@ -25,11 +24,11 @@ import { Testimonial } from '../../../../core/models/models';
 
           <!-- Navigation Buttons (Top Right for Desktop) -->
           <div class="flex gap-4">
-            <button (click)="scrollTestimonials('left')" 
+            <button type="button" (click)="scrollTestimonials('left')" aria-label="Previous reviews"
                     class="w-12 h-12 rounded-full border border-slate-200 bg-white text-slate-600 flex items-center justify-center hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm">
               <app-icon name="chevron-left" class="w-6 h-6"></app-icon>
             </button>
-            <button (click)="scrollTestimonials('right')" 
+            <button type="button" (click)="scrollTestimonials('right')" aria-label="Next reviews"
                     class="w-12 h-12 rounded-full border border-slate-200 bg-white text-slate-600 flex items-center justify-center hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm">
               <app-icon name="chevron-right" class="w-6 h-6"></app-icon>
             </button>
@@ -66,7 +65,7 @@ import { Testimonial } from '../../../../core/models/models';
               
               <!-- Case A: Client Photo Uploaded -->
               <div *ngIf="t.imageUrl" class="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md shrink-0">
-                <img [src]="t.imageUrl" class="w-full h-full object-cover" alt="Client photo">
+                <img [src]="t.imageUrl" class="w-full h-full object-cover" [alt]="'Photo of ' + t.author" loading="lazy">
               </div>
 
               <!-- Case B: No Photo (Use Initials) -->

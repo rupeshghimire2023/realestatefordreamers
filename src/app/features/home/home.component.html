@@ -1,85 +1,62 @@
-<!-- TEMP BUTTON: REMOVE AFTER UPLOADING -->
-<!-- <button (click)="uploadTestimonials()" class="fixed top-24 left-4 z-50 bg-red-600 text-white px-6 py-3 rounded-full font-bold shadow-2xl border-4 border-white">
-  ⚠️ Upload 28 Reviews to Firebase
-</button> -->
-<!-- END TEMP BUTTON -->
-
 <div class="min-h-screen font-sans text-slate-800 bg-slate-50 selection:bg-amber-200 selection:text-amber-900">
-  
+
   <app-home-hero (startJourney)="handleStartJourney($event)"></app-home-hero>
 
-  <!-- <app-home-about></app-home-about>
+  <!--
+    Sections below the fold load when scrolled into view (and are prefetched when the
+    browser is idle). The section ids live on these wrappers, not inside the components,
+    so navigation can find them before the deferred content has loaded.
+  -->
 
-  <app-home-featured-portfolio [listings]="featuredListings"></app-home-featured-portfolio>
-
-  <app-home-services (startJourney)="handleStartJourney($event)"></app-home-services>
-  
-  <app-home-mortgage-calculator></app-home-mortgage-calculator>
-  
-  <app-home-value></app-home-value>
-
-  
-  <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
-
-  <app-home-contact></app-home-contact> -->
-
-  <!-- 4. LAZY LOAD: Services -->
-
-
-
- 
-
-
-    <!-- 2. ABOUT -->
-  <div id="about"> <!-- FIX: Added wrapper ID -->
-    @defer (on viewport) {
+  <!-- ABOUT -->
+  <div id="about">
+    @defer (on viewport; prefetch on idle) {
       <app-home-about></app-home-about>
     } @placeholder {
       <div class="h-[600px] bg-slate-50"></div>
     }
   </div>
 
-  <!-- 3. PORTFOLIO PREVIEW -->
-  <div id="portfolio-preview"> <!-- Added ID just in case -->
-    @defer (on viewport) {
-      <app-home-featured-portfolio [listings]="featuredListings"></app-home-featured-portfolio>
+  <!-- PORTFOLIO PREVIEW -->
+  <div id="portfolio-preview">
+    @defer (on viewport; prefetch on idle) {
+      <app-home-featured-portfolio [listings]="featuredListings()"></app-home-featured-portfolio>
     } @placeholder {
       <div class="h-[600px] bg-slate-50"></div>
     }
   </div>
 
-    <!-- 4. SERVICES (Buying/Selling) -->
-  <div id="buying"> <!-- FIX: Added wrapper ID. This allows nav to find it immediately. -->
-    @defer (on viewport) {
+  <!-- SERVICES (Buying/Selling) -->
+  <div id="buying">
+    @defer (on viewport; prefetch on idle) {
       <app-home-services (startJourney)="handleStartJourney($event)"></app-home-services>
     } @placeholder {
       <div class="h-[400px] bg-slate-900"></div>
     }
   </div>
 
-
-  <!-- 5. CALCULATOR & VALUE -->
-  <div id="calculator"> <!-- FIX: Added wrapper ID -->
-    @defer (on viewport) {
+  <!-- HOME VALUE & MORTGAGE CALCULATOR -->
+  <div id="calculator">
+    @defer (on viewport; prefetch on idle) {
       <app-home-value></app-home-value>
       <app-home-mortgage-calculator></app-home-mortgage-calculator>
     } @placeholder {
       <div class="h-[800px] bg-slate-50"></div>
     }
   </div>
-  
-  <!-- 6. TESTIMONIALS (Stories) -->
-  <div id="testimonials"> <!-- FIX: Added wrapper ID -->
-    @defer (on viewport) {
-      <app-home-testimonials [testimonials]="testimonials"></app-home-testimonials>
+
+  <!-- TESTIMONIALS (Stories) -->
+  <div id="testimonials">
+    @defer (on viewport; prefetch on idle) {
+      <app-home-testimonials [testimonials]="testimonials()"></app-home-testimonials>
     } @placeholder {
       <div class="h-[500px] bg-amber-50"></div>
     }
   </div>
 
-  <!-- 7. CONTACT -->
-  <div id="contact"> <!-- This was already correct, keeping it. -->
-    @defer (on viewport) {
+  <!-- CONTACT -->
+  <div id="contact">
+    @defer (on viewport; prefetch on idle) {
       <app-home-contact></app-home-contact>
     } @placeholder {
       <div class="h-[600px] bg-white"></div>
@@ -87,7 +64,7 @@
   </div>
 
   <!-- Blog Preview Section -->
-  <section id="blog" class="py-24 bg-white" *ngIf="recentPosts.length > 0">
+  <section id="blog" class="py-24 bg-white" *ngIf="recentPosts().length > 0">
     <div class="container mx-auto px-6">
       <div class="flex justify-between items-end mb-12">
         <div>
@@ -98,15 +75,15 @@
       </div>
 
       <div class="grid md:grid-cols-3 gap-8">
-        <div *ngFor="let post of recentPosts" [routerLink]="['/blog', post.id]" class="group cursor-pointer">
+        <a *ngFor="let post of recentPosts()" [routerLink]="['/blog', post.id]" class="block group cursor-pointer">
           <div class="rounded-2xl overflow-hidden h-56 mb-6 shadow-sm group-hover:shadow-xl transition-all duration-300">
-            <img [src]="post.imageUrl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+            <img [src]="post.imageUrl" [alt]="post.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
           </div>
           <span class="text-amber-600 text-xs font-bold uppercase tracking-wider">{{ post.category }}</span>
           <h3 class="text-xl font-bold text-slate-900 mt-2 mb-3 group-hover:text-amber-600 transition-colors">{{ post.title }}</h3>
-          <p class="text-slate-500 text-sm line-clamp-2 leading-relaxed">{{ post.content }}</p>
+          <p class="text-slate-500 text-sm line-clamp-2 leading-relaxed">{{ post.content | excerpt }}</p>
           <span class="inline-block mt-4 text-slate-900 text-sm font-bold border-b-2 border-amber-100 group-hover:border-amber-500 transition-all">Read Article</span>
-        </div>
+        </a>
       </div>
       
       <div class="mt-8 text-center md:hidden">
@@ -114,7 +91,5 @@
       </div>
     </div>
   </section>
-
-  
 
 </div>

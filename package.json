@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "node set-env.js && ng build",
+    "build": "ng build",
+    "build:netlify": "node set-env.js && ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:functions": "tsc -p netlify --noEmit && vitest run --config netlify/vitest.config.mts"
   },
   "prettier": {
     "printWidth": 100,
@@ -30,9 +32,8 @@
     "@angular/forms": "^21.0.0",
     "@angular/platform-browser": "^21.0.0",
     "@angular/router": "^21.0.0",
-    "@ngx-translate/core": "^17.0.0",
-    "@ngx-translate/http-loader": "^17.0.0",
     "firebase": "^11.10.0",
+    "marked": "^18.3.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -40,7 +41,8 @@
     "@angular/build": "^21.0.2",
     "@angular/cli": "^21.0.2",
     "@angular/compiler-cli": "^21.0.0",
-    "@tailwindcss/cli": "^4.1.17",
+    "@netlify/functions": "^6.1.2",
+    "@tailwindcss/typography": "^0.5.20",
     "autoprefixer": "^10.4.22",
     "jsdom": "^27.1.0",
     "postcss": "^8.5.6",

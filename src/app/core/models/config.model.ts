@@ -1,42 +1,38 @@
 export interface SiteConfig {
-   realtor: {
+  realtor: {
     firstName: string;
     lastName: string;
     fullName: string;
     title: string;          // e.g. "Top Producer | Realtor®"
     brokerage: string;      // e.g. "Main Street Realty Group"
     email: string;
-    phone: string;
-    phoneDisplay: string;   // e.g. "(678) 663-3569"
-    headshotUrl: string;    // URL to their profile picture
+    phone: string;          // E.164, used for tel: links, e.g. "+14706526362"
+    phoneDisplay: string;   // e.g. "(470) 652-6362"
+    headshotUrl: string;    // URL to their full portrait (About section)
+    avatarUrl: string;      // URL to the small round profile photo (chat, contact, blog)
     startedYear: number;
-  };
-  
-  branding: {
-    websiteName: string;    // e.g. "Real Estate for Dreamers"
-    logoInitial: string;    // e.g. "K" or "R"
-    myLogo: string;         //e.g image source
-    heroImage: string;      // Background image for home page
-  };
-  
-  // NEW: Theme Configuration
-  theme: {
-    primaryColor: string;    // Main action color (Buttons, Highlights)
-    secondaryColor: string;  // Dark background color (Footer, Hero BG)
-    accentColor: string;     // Subtle accents
+    topProducerYears: number[]; // Shown on the About and Contact sections
   };
 
+  branding: {
+    websiteName: string;    // e.g. "Real Estate for Dreamers"
+    logoInitial: string;    // e.g. "K" (footer badge)
+    myLogo: string;         // Logo image URL (header)
+    heroImage: string;      // Poster image shown while the hero video loads
+    heroVideo: string;      // Background video for home page
+  };
+
+  // Leave a network out (or empty) to hide its icon.
   socials: {
     facebook?: string;
     instagram?: string;
     linkedin?: string;
     tiktok?: string;
   };
-  
+
   content: {
     heroTagline: string;
     heroSubtext: string;
-    aboutBioShort: string;  // For summaries
-    aboutBioLong: string;   // For the full About section
+    aboutBioLong: string;   // HTML for the About section's bio (rendered with Angular's sanitizer)
   };
 }

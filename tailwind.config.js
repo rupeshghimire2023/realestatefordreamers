@@ -6,5 +6,6 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  // typography: styles the Markdown in blog posts (the `prose` classes)
+  plugins: [require('@tailwindcss/typography')],
 }
