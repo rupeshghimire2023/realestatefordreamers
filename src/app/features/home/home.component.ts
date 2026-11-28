@@ -17,6 +17,7 @@ import { ContactIntentService, toLeadInterest } from '../../core/services/contac
 import { SectionNavService } from '../../core/services/section-nav.service';
 import { ExcerptPipe } from '../../shared/pipes/excerpt.pipe';
 import { JourneyTarget } from '../../core/models/models';
+import { ImgFallbackDirective } from '../../shared/directives/img-fallback.directive';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,7 @@ import { JourneyTarget } from '../../core/models/models';
     HomeValueComponent,
     ContactComponent,
     ExcerptPipe
-  ],
+  , ImgFallbackDirective],
   templateUrl: './home.component.html'
 })
 export class HomeComponent {

@@ -9,10 +9,11 @@ import { SectionNavService } from '../../../../core/services/section-nav.service
 import { LeadInterest } from '../../../../core/models/models';
 import { LEAD_LIMITS } from '../../../../core/utils/lead';
 import { phoneValidator } from '../../../../shared/validators/phone.validator';
+import { ImgFallbackDirective } from '../../../../shared/directives/img-fallback.directive';
 
 @Component({
   selector: 'app-home-contact',
-  imports: [CommonModule, ReactiveFormsModule, IconComponent],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent, ImgFallbackDirective],
   template: `
     <section class="py-24 bg-white relative overflow-hidden">
       <!-- Decorative Background -->
@@ -37,7 +38,7 @@ import { phoneValidator } from '../../../../shared/validators/phone.validator';
               
               <!-- Personal Info Card -->
               <div class="bg-white border border-slate-100 p-6 rounded-2xl shadow-sm flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-                <img [src]="cfg.realtor.avatarUrl" alt="" loading="lazy" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 shadow-md">
+                <img [src]="cfg.realtor.avatarUrl" appFallback="/assets/logo.png" fallbackFit="contain" alt="" loading="lazy" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100 shadow-md">
                 <div>
                   <h3 class="text-xl font-serif font-bold text-slate-900">{{ cfg.realtor.fullName }}</h3>
                   <p class="text-amber-600 font-medium text-sm uppercase tracking-wide mb-2">Realtor® | {{ cfg.realtor.brokerage }}</p>

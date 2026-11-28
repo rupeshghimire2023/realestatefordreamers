@@ -8,10 +8,11 @@ import { IconComponent } from '../../../shared/components/icon/icon.component';
 import { ConfigService } from '../../../core/services/config.service';
 import { BlogService } from '../../../core/services/blog.service';
 import { MarkdownPipe } from '../../../shared/pipes/markdown.pipe';
+import { ImgFallbackDirective } from '../../../shared/directives/img-fallback.directive';
 
 @Component({
   selector: 'app-blog-detail',
-  imports: [CommonModule, RouterModule, IconComponent, MarkdownPipe],
+  imports: [CommonModule, RouterModule, IconComponent, MarkdownPipe, ImgFallbackDirective],
   templateUrl: './blog-detail.component.html'
 })
 export class BlogDetailComponent {

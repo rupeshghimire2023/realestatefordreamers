@@ -5,7 +5,6 @@
 // the functions in netlify/functions.)
 export const environment = {
   production: false,
-  googleMapsApiKey: 'YOUR_GOOGLE_MAPS_API_KEY', // Restrict to your domains (HTTP referrers) in Google Cloud
   firebaseConfig: {
     apiKey: '',
     authDomain: '',

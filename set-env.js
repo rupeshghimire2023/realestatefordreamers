@@ -16,7 +16,6 @@ const env = name => JSON.stringify(process.env[name] || '');
 const envConfigFile = `
 export const environment = {
   production: true,
-  googleMapsApiKey: ${env('GOOGLE_MAPS_API_KEY')},
   firebaseConfig: {
     apiKey: ${env('FIREBASE_API_KEY')},
     authDomain: ${env('FIREBASE_AUTH_DOMAIN')},
