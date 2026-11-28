@@ -36,11 +36,11 @@ Frontend: Angular 21 (Standalone Components, Signals, zoneless)
 
 Styling: Tailwind CSS
 
-Database: Firebase Firestore & Storage (security rules in firestore.rules / storage.rules)
+Database: Firebase Firestore & Storage (security rules in firestore.rules / storage.rules). Cloud Storage requires the Firebase Blaze (pay-as-you-go) plan; set a budget alert in Google Cloud Billing.
 
 AI: any OpenAI-compatible chat API (default: Groq free tier, openai/gpt-oss-20b) via a Netlify Function (netlify/functions/chat.mts)
 
-Integrations: Google Apps Script via netlify/functions/lead.mts (Form Handling & Agentic Workflows), Google Maps Places (address autocomplete)
+Integrations: Google Apps Script via netlify/functions/lead.mts (Form Handling & Agentic Workflows; source in apps-script/Code.gs)
 
 🚀 Getting Started
 
@@ -68,12 +68,15 @@ Realtor details (name, photos, phone, email, socials, Top Producer years, hero t
 
 Blog posts (Firestore `blog_posts`) are written in Markdown; plain text with line breaks works too.
 
+🎨 Brand: the icon-only logo (src/assets/brand/logo-mark.svg, traced from the badge) is used in the header, footer, favicon and small avatars; the full badge (src/assets/logo.png) is for large uses. Both paths are in realtor-data.ts (branding).
+
+🖼️ Images are hosted in Firebase Storage (upload in the Firebase console and copy the download URL) or linked from the MLS. If a photo link breaks, listings and blog posts show a neutral placeholder and the realtor's photos fall back to the logo, instead of a broken-image icon.
+
 ☁️ Deployment (Netlify)
 
 Netlify runs `npm run build:netlify` (set in netlify.toml), which runs set-env.js to generate environment.ts from these Netlify environment variables, then builds. Locally, `npm run build` just builds with your own environment.ts (don't run `build:netlify` locally: it overwrites that file).
 
 Public (written into the browser bundle by set-env.js):
-- GOOGLE_MAPS_API_KEY (restrict it to your domains under HTTP referrers in Google Cloud)
 - FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_PROJECT_ID, FIREBASE_STORAGE_BUCKET, FIREBASE_SENDER_ID, FIREBASE_APP_ID
 
 Server-side only (read by the functions at runtime; mark them as "Contains secret values" in Netlify so secret scanning fails any build that leaks them):

@@ -29,15 +29,15 @@ import { JourneyTarget } from '../../../../core/models/models';
       </div>
 
       <div class="container mx-auto px-6 relative z-10 text-center text-white mt-16">
-        <p class="text-amber-400 font-medium tracking-widest uppercase mb-4 animate-fadeInUp">{{ cfg.content.heroTagline }}</p>
+        <p class="text-brand-400 font-medium tracking-widest uppercase mb-4 animate-fadeInUp">{{ cfg.content.heroTagline }}</p>
         <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight animate-fadeInUp delay-100">
-          Find Your Place in the <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-500">World</span>
+          Find Your Place in the <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-200 to-brand-600">World</span>
         </h1>
         <p class="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto mb-10 font-light leading-relaxed animate-fadeInUp delay-200">
           {{ cfg.content.heroSubtext }}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fadeInUp delay-300">
-          <button type="button" (click)="startJourney.emit('services')" class="px-8 py-4 bg-amber-500 text-white rounded-full font-semibold hover:bg-amber-600 transition-all transform hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-500/30 w-full sm:w-auto">
+          <button type="button" (click)="startJourney.emit('services')" class="px-8 py-4 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-700 transition-all transform hover:-translate-y-1 hover:shadow-lg hover:shadow-brand-600/30 w-full sm:w-auto">
             Our Services
           </button>
           <button type="button" (click)="startJourney.emit('about')" class="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white rounded-full font-semibold hover:bg-white hover:text-slate-900 transition-all w-full sm:w-auto">

@@ -12,7 +12,7 @@ import { JourneyTarget } from '../../../../core/models/models';
       <div class="container mx-auto px-6">
         
         <div class="text-center mb-16">
-          <span class="text-amber-600 font-semibold tracking-wider text-sm uppercase">Our Expertise</span>
+          <span class="text-brand-700 font-semibold tracking-wider text-sm uppercase">Our Expertise</span>
           <h2 class="text-3xl md:text-4xl font-serif font-bold text-slate-900 mt-2">Tailored Services for You</h2>
           <p class="text-slate-600 mt-4 max-w-2xl mx-auto">
             Whether you are beginning your journey or closing a chapter, we provide the strategic guidance you need.
@@ -34,7 +34,7 @@ import { JourneyTarget } from '../../../../core/models/models';
             <!-- Content -->
             <div class="absolute inset-0 p-10 flex flex-col justify-end">
               <div class="mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <div class="w-14 h-14 bg-amber-500 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
+                <div class="w-14 h-14 bg-brand-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
                   <app-icon name="home" class="w-8 h-8"></app-icon>
                 </div>
                 
@@ -45,21 +45,21 @@ import { JourneyTarget } from '../../../../core/models/models';
 
                 <ul class="space-y-3 mb-8 border-t border-white/20 pt-6">
                   <li class="flex items-center gap-3 text-slate-200">
-                    <app-icon name="star-filled" class="w-5 h-5 text-amber-500"></app-icon>
+                    <app-icon name="star-filled" class="w-5 h-5 text-brand-600"></app-icon>
                     Needs Analysis & Lifestyle Matching
                   </li>
                   <li class="flex items-center gap-3 text-slate-200">
-                    <app-icon name="star-filled" class="w-5 h-5 text-amber-500"></app-icon>
+                    <app-icon name="star-filled" class="w-5 h-5 text-brand-600"></app-icon>
                     Virtual Tours & Remote Buying
                   </li>
                   <li class="flex items-center gap-3 text-slate-200">
-                    <app-icon name="star-filled" class="w-5 h-5 text-amber-500"></app-icon>
+                    <app-icon name="star-filled" class="w-5 h-5 text-brand-600"></app-icon>
                     Strategic Contract Negotiation
                   </li>
                 </ul>
 
                 <button type="button" (click)="startJourney.emit('buying')" 
-                        class="w-full py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-amber-500 hover:text-white transition-all shadow-lg flex items-center justify-center gap-2">
+                        class="w-full py-4 bg-white text-slate-900 font-bold rounded-xl hover:bg-brand-600 hover:text-white transition-all shadow-lg flex items-center justify-center gap-2">
                   Start Buying Journey
                   <app-icon name="chevron-right" class="w-4 h-4"></app-icon>
                 </button>
@@ -91,21 +91,21 @@ import { JourneyTarget } from '../../../../core/models/models';
 
                 <ul class="space-y-3 mb-8 border-t border-white/20 pt-6">
                   <li class="flex items-center gap-3 text-slate-200">
-                    <app-icon name="star-filled" class="w-5 h-5 text-amber-500"></app-icon>
+                    <app-icon name="star-filled" class="w-5 h-5 text-brand-600"></app-icon>
                     Data-Driven Home Valuation
                   </li>
                   <li class="flex items-center gap-3 text-slate-200">
-                    <app-icon name="star-filled" class="w-5 h-5 text-amber-500"></app-icon>
+                    <app-icon name="star-filled" class="w-5 h-5 text-brand-600"></app-icon>
                     Professional Staging & Photography
                   </li>
                   <li class="flex items-center gap-3 text-slate-200">
-                    <app-icon name="star-filled" class="w-5 h-5 text-amber-500"></app-icon>
+                    <app-icon name="star-filled" class="w-5 h-5 text-brand-600"></app-icon>
                     Targeted Marketing Campaigns
                   </li>
                 </ul>
 
                 <button type="button" (click)="startJourney.emit('selling')" 
-                        class="w-full py-4 bg-amber-500 text-white font-bold rounded-xl hover:bg-white hover:text-slate-900 transition-all shadow-lg flex items-center justify-center gap-2">
+                        class="w-full py-4 bg-brand-600 text-white font-bold rounded-xl hover:bg-white hover:text-slate-900 transition-all shadow-lg flex items-center justify-center gap-2">
                   Start Selling Journey
                   <app-icon name="chevron-right" class="w-4 h-4"></app-icon>
                 </button>

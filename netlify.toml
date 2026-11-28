@@ -5,8 +5,8 @@
 
 # Secret scanning is on: a build fails if a secret ends up in the site files.
 # In Netlify, mark CHAT_API_KEY and GOOGLE_SCRIPT_URL as "Contains secret values".
-# The Firebase config and the Maps key are public by design (they ship to the
-# browser). If smart detection flags them, list those values in a
+# The Firebase config is public by design (it ships to the browser). If smart
+# detection flags it, list those values in a
 # SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES variable in the Netlify UI rather
 # than turning scanning off.
 

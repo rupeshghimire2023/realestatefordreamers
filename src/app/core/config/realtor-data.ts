@@ -20,8 +20,8 @@ export const REALTOR_DATA: SiteConfig = {
 
   branding: {
     websiteName: 'Real Estate for Dreamers',
-    logoInitial: 'K',
-    myLogo: 'https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Flogo.png?alt=media&token=068a9e22-31a3-4d4a-8fe2-c84c8929de4f',
+    logoMark: '/assets/brand/logo-mark.svg',
+    fullLogo: '/assets/logo.png',
     heroImage: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=2070',
     heroVideo: 'https://firebasestorage.googleapis.com/v0/b/real-estate-for-dreamers-dc887.firebasestorage.app/o/assets%2Fbackground_video.mp4?alt=media&token=70d6dc58-2bb4-4e3e-b168-fddebaa8f6bd'
   },
@@ -42,7 +42,7 @@ export const REALTOR_DATA: SiteConfig = {
       <p class="mb-6">
         Although constant relocation was challenging, it sparked a lifelong passion for seeing new homes and meeting new people.
       </p>
-      <div class="bg-slate-50 border-l-4 border-amber-500 p-5 rounded-r-lg mb-6 italic text-slate-700 shadow-sm">
+      <div class="bg-slate-50 border-l-4 border-brand-600 p-5 rounded-r-lg mb-6 italic text-slate-700 shadow-sm">
         "Rich Dad Poor Dad" by Robert T. Kiyosaki wasn't just a book I read young—it was the spark that confirmed real estate was my calling.
       </div>
       <p>

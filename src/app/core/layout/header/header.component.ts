@@ -21,12 +21,10 @@ interface NavItem {
       <div class="container mx-auto px-6 flex justify-between items-center">
         
         <!-- Logo -->
-        <a routerLink="/" (click)="onLogoClick()" class="text-2xl md:text-3xl font-serif font-bold tracking-tight flex items-center gap-2 group cursor-pointer">
-          <div class="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
-           <img [src]="cfg.branding.myLogo" [alt]="cfg.branding.websiteName" />
-          </div>
+        <a routerLink="/" (click)="onLogoClick()" class="text-2xl md:text-3xl font-serif font-bold tracking-tight flex items-center gap-3 group cursor-pointer">
+          <img [src]="cfg.branding.logoMark" alt="" class="h-10 md:h-12 w-auto shrink-0 group-hover:scale-105 transition-transform">
           <span [ngClass]="{'text-slate-800': isScrolled(), 'text-white': !isScrolled(), 'text-slate-900': isMobileMenuOpen()}">
-            Real Estate <span class="text-amber-500">for Dreamers</span>
+            Real Estate <span class="text-brand-600">for Dreamers</span>
           </span>
         </a>
 
@@ -34,13 +32,13 @@ interface NavItem {
         <div class="hidden md:flex items-center space-x-8">
           <ng-container *ngFor="let item of navItems">
             <a *ngIf="item.route; else sectionLink" [routerLink]="item.route"
-               class="cursor-pointer font-medium hover:text-amber-500 transition-colors"
+               class="cursor-pointer font-medium hover:text-brand-600 transition-colors"
                [ngClass]="{'text-slate-600': isScrolled(), 'text-white/90 hover:text-white': !isScrolled()}">
               {{ item.label }}
             </a>
             <ng-template #sectionLink>
               <button type="button" (click)="goToSection(item.section!)"
-                      class="cursor-pointer font-medium hover:text-amber-500 transition-colors"
+                      class="cursor-pointer font-medium hover:text-brand-600 transition-colors"
                       [ngClass]="{'text-slate-600': isScrolled(), 'text-white/90 hover:text-white': !isScrolled()}">
                 {{ item.label }}
               </button>
@@ -49,7 +47,7 @@ interface NavItem {
           
           <button type="button" (click)="goToSection('contact')" 
                   class="px-6 py-2.5 rounded-full font-semibold transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl"
-                  [ngClass]="{'bg-amber-500 text-white hover:bg-amber-600': isScrolled(), 'bg-white text-slate-900 hover:bg-slate-100': !isScrolled()}">
+                  [ngClass]="{'bg-brand-600 text-white hover:bg-brand-700': isScrolled(), 'bg-white text-slate-900 hover:bg-slate-100': !isScrolled()}">
             Let's Talk
           </button>
         </div>
@@ -69,17 +67,17 @@ interface NavItem {
       <div *ngIf="isMobileMenuOpen()" id="mobile-menu" class="absolute top-full left-0 w-full bg-white border-t border-slate-100 shadow-xl py-4 px-6 md:hidden flex flex-col space-y-4 animate-slideDown">
         <ng-container *ngFor="let item of navItems">
           <a *ngIf="item.route; else mobileSectionLink" [routerLink]="item.route" (click)="closeMenu()"
-             class="text-left text-lg font-medium text-slate-600 hover:text-amber-500 py-2 border-b border-slate-50">
+             class="text-left text-lg font-medium text-slate-600 hover:text-brand-600 py-2 border-b border-slate-50">
             {{ item.label }}
           </a>
           <ng-template #mobileSectionLink>
             <button type="button" (click)="goToSection(item.section!)"
-                    class="text-left text-lg font-medium text-slate-600 hover:text-amber-500 py-2 border-b border-slate-50">
+                    class="text-left text-lg font-medium text-slate-600 hover:text-brand-600 py-2 border-b border-slate-50">
               {{ item.label }}
             </button>
           </ng-template>
         </ng-container>
-        <button type="button" (click)="goToSection('contact')" class="w-full bg-amber-500 text-white py-3 rounded-lg font-semibold shadow-md active:scale-95 transition-transform">
+        <button type="button" (click)="goToSection('contact')" class="w-full bg-brand-600 text-white py-3 rounded-lg font-semibold shadow-md active:scale-95 transition-transform">
           Book Consultation
         </button>
       </div>

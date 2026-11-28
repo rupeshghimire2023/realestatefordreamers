@@ -16,8 +16,8 @@ export interface SiteConfig {
 
   branding: {
     websiteName: string;    // e.g. "Real Estate for Dreamers"
-    logoInitial: string;    // e.g. "K" (footer badge)
-    myLogo: string;         // Logo image URL (header)
+    logoMark: string;       // Icon-only logo (house + key): header, footer, favicon, small avatars
+    fullLogo: string;       // Full circular badge: large uses, and the stand-in for a missing portrait
     heroImage: string;      // Poster image shown while the hero video loads
     heroVideo: string;      // Background video for home page
   };

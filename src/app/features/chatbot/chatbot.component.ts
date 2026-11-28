@@ -5,10 +5,11 @@ import { IconComponent } from '../../shared/components/icon/icon.component';
 import { ChatService } from '../../core/services/chat.service';
 import { ChatMessage } from '../../core/models/models';
 import { ConfigService } from '../../core/services/config.service';
+import { ImgFallbackDirective } from '../../shared/directives/img-fallback.directive';
 
 @Component({
   selector: 'app-chatbot',
-  imports: [CommonModule, FormsModule, IconComponent],
+  imports: [CommonModule, FormsModule, IconComponent, ImgFallbackDirective],
   template: `
     <!-- Floating Action Button (Face Icon when closed) -->
     <button type="button" (click)="toggleChat()"
@@ -18,7 +19,7 @@ import { ConfigService } from '../../core/services/config.service';
             class="fixed bottom-6 right-6 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50 group border-4 border-white overflow-hidden bg-slate-900">
       
       <!-- Show Face when closed -->
-      <img *ngIf="!isOpen()" [src]="cfg.realtor.avatarUrl" class="w-full h-full object-cover" alt="">
+      <img *ngIf="!isOpen()" [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" class="w-full h-full object-cover" alt="">
       
       <!-- Show X when open -->
       <div *ngIf="isOpen()" class="w-full h-full flex items-center justify-center bg-slate-900 text-white">
@@ -26,7 +27,7 @@ import { ConfigService } from '../../core/services/config.service';
       </div>
       
       <!-- Notification Dot -->
-      <span *ngIf="!isOpen() && hasUnread()" class="absolute top-0 right-0 w-4 h-4 bg-amber-500 rounded-full border-2 border-white animate-pulse"></span>
+      <span *ngIf="!isOpen() && hasUnread()" class="absolute top-0 right-0 w-4 h-4 bg-brand-600 rounded-full border-2 border-white animate-pulse"></span>
     </button>
 
     <!-- Chat Window -->
@@ -36,18 +37,18 @@ import { ConfigService } from '../../core/services/config.service';
       <!-- Header: Personal Profile -->
       <div class="bg-slate-900 p-4 text-white flex items-center gap-4 shadow-md relative overflow-hidden">
         <!-- Background decoration -->
-        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
+        <div class="absolute top-0 right-0 w-32 h-32 bg-brand-600 rounded-full blur-3xl opacity-20 -mr-10 -mt-10"></div>
         
         <!-- Avatar -->
         <div class="relative shrink-0">
-          <img [src]="cfg.realtor.avatarUrl" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-lg">
+          <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-white/20 shadow-lg">
         </div>
         
         <!-- Info -->
         <div class="relative">
           <h3 class="font-serif font-bold text-lg leading-none">{{ cfg.realtor.fullName }}</h3>
           <p class="text-xs text-slate-400 mt-1">Virtual assistant (AI)</p>
-          <p class="text-[10px] text-amber-500 font-medium mt-0.5">{{ cfg.realtor.firstName }} follows up personally</p>
+          <p class="text-[10px] text-brand-600 font-medium mt-0.5">{{ cfg.realtor.firstName }} follows up personally</p>
         </div>
       </div>
 
@@ -63,7 +64,7 @@ import { ConfigService } from '../../core/services/config.service';
              [ngClass]="{'flex justify-end': msg.isUser, 'flex justify-start items-end gap-2': !msg.isUser}">
           
           <!-- Bot Avatar (Only show for bot messages) -->
-          <img *ngIf="!msg.isUser" [src]="cfg.realtor.avatarUrl" alt="" class="w-8 h-8 rounded-full object-cover border border-slate-200 mb-1 shadow-sm">
+          <img *ngIf="!msg.isUser" [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-8 h-8 rounded-full object-cover border border-slate-200 mb-1 shadow-sm">
 
           <!-- Message Bubble -->
           <div [ngClass]="{
@@ -73,7 +74,7 @@ import { ConfigService } from '../../core/services/config.service';
                class="max-w-[80%] p-3.5 text-sm leading-relaxed relative group whitespace-pre-line">
             
             <!-- Name label for Bot -->
-            <p *ngIf="!msg.isUser" class="text-[10px] font-bold text-amber-600 mb-1 uppercase tracking-wide">{{ cfg.realtor.firstName }}'s assistant</p>
+            <p *ngIf="!msg.isUser" class="text-[10px] font-bold text-brand-700 mb-1 uppercase tracking-wide">{{ cfg.realtor.firstName }}'s assistant</p>
             
             {{ msg.text }}
             
@@ -87,7 +88,7 @@ import { ConfigService } from '../../core/services/config.service';
 
         <!-- Typing Indicator -->
         <div *ngIf="isTyping()" class="flex justify-start items-end gap-2 animate-fadeIn">
-           <img [src]="cfg.realtor.avatarUrl" alt="" class="w-6 h-6 rounded-full object-cover grayscale opacity-50 mb-1">
+           <img [src]="cfg.realtor.avatarUrl" [appFallback]="cfg.branding.logoMark" fallbackFit="contain" alt="" class="w-6 h-6 rounded-full object-cover grayscale opacity-50 mb-1">
            <div class="bg-slate-100 px-4 py-2 rounded-full text-xs flex gap-1 items-center">
              <span class="w-1 h-1 bg-slate-400 rounded-full animate-bounce"></span>
              <span class="w-1 h-1 bg-slate-400 rounded-full animate-bounce delay-100"></span>
@@ -104,9 +105,9 @@ import { ConfigService } from '../../core/services/config.service';
                  maxlength="1000"
                  aria-label="Your question"
                  placeholder="Ask a question..." 
-                 class="flex-1 px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm transition-all placeholder:text-slate-400">
+                 class="flex-1 px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-full focus:outline-none focus:ring-2 focus:ring-brand-600/20 focus:border-brand-600 text-sm transition-all placeholder:text-slate-400">
           <button type="submit" [disabled]="!newMessage.trim() || isTyping()" aria-label="Send message" 
-                  class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg transform active:scale-95">
+                  class="w-12 h-12 bg-slate-900 text-white rounded-full flex items-center justify-center hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg transform active:scale-95">
             <app-icon name="send" class="w-5 h-5 ml-0.5"></app-icon>
           </button>
         </form>
